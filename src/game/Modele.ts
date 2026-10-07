@@ -23,8 +23,18 @@ export interface Apparence {
   chaussures: string;
   /** Sans visage ni détails : pour les figurants */
   simple?: boolean;
-  /** 'mii' : grosse tête ronde, visage dessiné, coiffure simple. Sinon : style détaillé */
+  /** 'mii' : style figurine, grosse tête ronde, visage dessiné, cheveux en pâte à modeler. Sinon : style détaillé */
   style?: string;
+  /** 'ouverte' : grand sourire bouche ouverte. Sinon : sourire fermé */
+  bouche?: string;
+  /** 'large' : jambes droites et amples, 'evase' : de plus en plus large vers le bas. Sinon : ajusté */
+  pantalonForme?: string;
+  /** Imprimé à fleurs sur le pantalon */
+  pantalonMotif?: { fond: string; fleurs: string } | null;
+  /** 'ballerines' : chaussures plates et basses. Sinon : baskets */
+  chaussuresForme?: string;
+  /** Couleur des perles d'un bracelet au poignet droit */
+  bracelet?: string | null;
 }
 
 /** Ce que l'animation doit montrer à cet instant */
@@ -61,15 +71,16 @@ type Vec3 = [number, number, number];
 // ---------------------------------------------------------------------------
 
 const materiaux = new Map<string, THREE.Material>();
-function mat(couleur: string, options: { double?: boolean; brillant?: boolean } = {}): THREE.Material {
-  const cle = `${couleur}-${options.double ? 1 : 0}-${options.brillant ? 1 : 0}`;
+function mat(couleur: string, options: { double?: boolean; brillant?: boolean; doux?: boolean } = {}): THREE.Material {
+  const cle = `${couleur}-${options.double ? 1 : 0}-${options.brillant ? 1 : 0}-${options.doux ? 1 : 0}`;
   let m = materiaux.get(cle);
   if (!m) {
     m = options.brillant
       ? new THREE.MeshBasicMaterial({ color: couleur })
       : new THREE.MeshStandardMaterial({
           color: couleur,
-          roughness: 0.8,
+          // "doux" : un léger reflet, comme de la pâte à modeler
+          roughness: options.doux ? 0.55 : 0.8,
           side: options.double ? THREE.DoubleSide : THREE.FrontSide,
         });
     materiaux.set(cle, m);
@@ -88,7 +99,7 @@ function piece(
   pos: Vec3,
   echelle?: Vec3,
   rotation?: Vec3,
-  options?: { double?: boolean; brillant?: boolean },
+  options?: { double?: boolean; brillant?: boolean; doux?: boolean },
 ): THREE.Mesh {
   const m = new THREE.Mesh(geo, mat(couleur, options));
   m.position.set(...pos);
@@ -108,23 +119,25 @@ function hasard(graine: number) {
   };
 }
 
-/** Garde seulement la position et la normale, sans index, pour pouvoir fusionner */
-function nettoyer(g: THREE.BufferGeometry): THREE.BufferGeometry {
+/** Garde seulement la position et la normale (et les coordonnées de texture si demandé), sans index, pour pouvoir fusionner */
+function nettoyer(g: THREE.BufferGeometry, garderUv = false): THREE.BufferGeometry {
   const n = g.index ? g.toNonIndexed() : g;
-  for (const nom of Object.keys(n.attributes)) if (nom !== 'position' && nom !== 'normal') n.deleteAttribute(nom);
+  for (const nom of Object.keys(n.attributes)) {
+    if (nom !== 'position' && nom !== 'normal' && !(garderUv && nom === 'uv')) n.deleteAttribute(nom);
+  }
   return n;
 }
 
 /** Regroupe plusieurs morceaux de même couleur en un seul objet (plus léger à afficher) */
-function fusion(parent: THREE.Object3D, morceaux: THREE.BufferGeometry[], couleur: string) {
+function fusion(parent: THREE.Object3D, morceaux: THREE.BufferGeometry[], couleur: string, doux = false) {
   if (morceaux.length === 0) return;
-  const m = new THREE.Mesh(mergeGeometries(morceaux.map(nettoyer)), mat(couleur));
+  const m = new THREE.Mesh(mergeGeometries(morceaux.map((g) => nettoyer(g))), mat(couleur, { doux }));
   m.castShadow = true;
   parent.add(m);
 }
 
 /** Un tube souple le long d'une courbe, plus fin au bout (mèches, sourcils, moustache) */
-function tube(points: THREE.Vector3[], r0: number, r1: number, cotes = 6, segments = 24): THREE.BufferGeometry {
+function tube(points: THREE.Vector3[], r0: number, r1: number, cotes = 6, segments = 24, profil?: (t: number) => number): THREE.BufferGeometry {
   const courbe = new THREE.CatmullRomCurve3(points);
   const reperes = courbe.computeFrenetFrames(segments, false);
   const pos: number[] = [];
@@ -132,7 +145,7 @@ function tube(points: THREE.Vector3[], r0: number, r1: number, cotes = 6, segmen
   for (let i = 0; i <= segments; i++) {
     const t = i / segments;
     const p = courbe.getPointAt(t);
-    const r = r0 + (r1 - r0) * t;
+    const r = profil ? profil(t) : r0 + (r1 - r0) * t;
     const n = reperes.normals[i];
     const b = reperes.binormals[i];
     for (let j = 0; j < cotes; j++) {
@@ -307,7 +320,7 @@ function regrouper(objet: THREE.Object3D) {
     if (meshes.length < 2) continue;
     const geos = meshes.map((m) => {
       m.updateMatrix();
-      return nettoyer(m.geometry.clone().applyMatrix4(m.matrix));
+      return nettoyer(m.geometry.clone().applyMatrix4(m.matrix), 'map' in materiau && !!materiau.map);
     });
     const fusionne = new THREE.Mesh(mergeGeometries(geos), materiau);
     fusionne.castShadow = true;
@@ -317,10 +330,10 @@ function regrouper(objet: THREE.Object3D) {
 }
 
 /** Style Mii : rayon de la tête, et la zone de la tête couverte par le dessin du visage */
-const RM = 0.27;
+const RM = 0.34;
 const VIS_PHI = 1.65;
 const VIS_T0 = 0.5;
-const VIS_T1 = 2.95;
+const VIS_T1 = 3.08;
 const VIS_L = 1024;
 const VIS_H = 768;
 
@@ -336,38 +349,43 @@ function dessinerVisage(a: Apparence, yeuxOuverts: boolean): HTMLCanvasElement {
   const X = (ang: number) => ((ang + VIS_PHI) / (VIS_PHI * 2)) * VIS_L;
   const Y = (t: number) => ((t - VIS_T0) / (VIS_T1 - VIS_T0)) * VIS_H;
   const px = VIS_L / (VIS_PHI * 2); // pixels par radian, à peu près pareil en hauteur
-  const trait = '#2b1e18';
+  const trait = '#231814';
   g.lineCap = 'round';
   g.lineJoin = 'round';
+  const yeuxY = 1.62;
+  const yeuxA = 0.36;
 
-  // Barbe : une zone sur la mâchoire et le menton, avec la moustache
+  // Barbe pleine : des pattes jusqu'au menton, en laissant la bouche et le haut des joues dégagés
   if (a.barbe) {
     g.fillStyle = a.barbe;
-    g.globalAlpha = 0.78;
     g.beginPath();
-    g.moveTo(X(-1.45), Y(1.62));
-    g.bezierCurveTo(X(-1.25), Y(2.05), X(-0.75), Y(2.1), X(-0.32), Y(2.04));
-    g.bezierCurveTo(X(-0.12), Y(2.0), X(0.12), Y(2.0), X(0.32), Y(2.04));
-    g.bezierCurveTo(X(0.75), Y(2.1), X(1.25), Y(2.05), X(1.45), Y(1.62));
-    g.lineTo(X(1.5), Y(VIS_T1));
-    g.lineTo(X(-1.5), Y(VIS_T1));
+    g.moveTo(X(-1.6), Y(1.3));
+    g.lineTo(X(-1.32), Y(1.32));
+    g.bezierCurveTo(X(-1.15), Y(1.78), X(-0.8), Y(2.02), X(-0.4), Y(2.2));
+    g.bezierCurveTo(X(-0.2), Y(2.27), X(0.2), Y(2.27), X(0.4), Y(2.2));
+    g.bezierCurveTo(X(0.8), Y(2.02), X(1.15), Y(1.78), X(1.32), Y(1.32));
+    g.lineTo(X(1.6), Y(1.3));
+    g.lineTo(X(1.6), Y(VIS_T1));
+    g.lineTo(X(-1.6), Y(VIS_T1));
     g.closePath();
     g.fill();
-    // Moustache
-    g.beginPath();
-    g.ellipse(X(0), Y(1.975), 0.21 * px, 0.04 * px, 0, 0, Math.PI * 2);
-    g.fill();
-    g.globalAlpha = 1;
+    // Moustache en accent circonflexe arrondi
+    g.strokeStyle = a.barbe;
+    for (const cote of [-1, 1]) {
+      g.beginPath();
+      g.ellipse(X(cote * 0.105), Y(1.95), 0.115 * px, 0.042 * px, -cote * 0.18, 0, Math.PI * 2);
+      g.fill();
+    }
   }
 
   // Joues roses et taches de rousseur
   if (a.joues) {
     for (const cote of [-1, 1]) {
-      const gr = g.createRadialGradient(X(cote * 0.5), Y(1.86), 0, X(cote * 0.5), Y(1.86), 0.17 * px);
-      gr.addColorStop(0, a.joues + 'aa');
+      const gr = g.createRadialGradient(X(cote * 0.56), Y(1.9), 0, X(cote * 0.56), Y(1.9), 0.17 * px);
+      gr.addColorStop(0, a.joues + 'b0');
       gr.addColorStop(1, a.joues + '00');
       g.fillStyle = gr;
-      g.fillRect(X(cote * 0.5) - 0.2 * px, Y(1.86) - 0.2 * px, 0.4 * px, 0.4 * px);
+      g.fillRect(X(cote * 0.56) - 0.2 * px, Y(1.9) - 0.2 * px, 0.4 * px, 0.4 * px);
     }
   }
   if (a.taches) {
@@ -376,75 +394,194 @@ function dessinerVisage(a: Apparence, yeuxOuverts: boolean): HTMLCanvasElement {
     for (let i = 0; i < 22; i++) {
       const cote = i % 2 ? 1 : -1;
       g.beginPath();
-      g.arc(X(cote * (0.12 + h() * 0.4)), Y(1.76 + h() * 0.16), 2.5 + h() * 1.5, 0, Math.PI * 2);
+      g.arc(X(cote * (0.14 + h() * 0.4)), Y(1.8 + h() * 0.16), 2.5 + h() * 1.5, 0, Math.PI * 2);
       g.fill();
     }
   }
 
-  // Yeux
+  // Grands yeux de figurine : iris coloré, gros reflet blanc, paupière foncée
   for (const cote of [-1, 1]) {
-    const x = X(cote * 0.33);
-    const y = Y(1.6);
+    const x = X(cote * yeuxA);
+    const y = Y(yeuxY);
     if (yeuxOuverts) {
+      g.fillStyle = '#fbfaf8';
+      g.beginPath();
+      g.ellipse(x, y, 0.135 * px, 0.155 * px, 0, 0, Math.PI * 2);
+      g.fill();
+      const iris = g.createLinearGradient(x, y - 0.13 * px, x, y + 0.13 * px);
+      iris.addColorStop(0, fonce(a.yeux, 0.55));
+      iris.addColorStop(1, a.yeux);
+      g.fillStyle = iris;
+      g.beginPath();
+      g.ellipse(x, y + 0.012 * px, 0.105 * px, 0.13 * px, 0, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = '#120d0b';
+      g.beginPath();
+      g.ellipse(x, y + 0.012 * px, 0.052 * px, 0.068 * px, 0, 0, Math.PI * 2);
+      g.fill();
       g.fillStyle = '#ffffff';
       g.beginPath();
-      g.ellipse(x, y, 0.13 * px, 0.15 * px, 0, 0, Math.PI * 2);
+      g.ellipse(x + 0.04 * px, y - 0.045 * px, 0.035 * px, 0.04 * px, 0, 0, Math.PI * 2);
       g.fill();
-      g.fillStyle = a.yeux;
       g.beginPath();
-      g.ellipse(x, y + 0.015 * px, 0.085 * px, 0.11 * px, 0, 0, Math.PI * 2);
+      g.arc(x - 0.035 * px, y + 0.06 * px, 0.016 * px, 0, Math.PI * 2);
       g.fill();
-      g.fillStyle = '#16110e';
-      g.beginPath();
-      g.ellipse(x, y + 0.015 * px, 0.045 * px, 0.06 * px, 0, 0, Math.PI * 2);
-      g.fill();
-      g.fillStyle = '#ffffff';
-      g.beginPath();
-      g.arc(x + 0.03 * px, y - 0.03 * px, 0.022 * px, 0, Math.PI * 2);
-      g.fill();
-      // Paupière du haut
+      // Paupière du haut, épaisse
       g.strokeStyle = trait;
-      g.lineWidth = 0.035 * px;
+      g.lineWidth = 0.04 * px;
       g.beginPath();
-      g.ellipse(x, y, 0.135 * px, 0.155 * px, 0, Math.PI * 1.08, Math.PI * 1.92);
+      g.ellipse(x, y, 0.14 * px, 0.16 * px, 0, Math.PI * 1.05, Math.PI * 1.95);
       g.stroke();
       if (a.cils) {
-        g.lineWidth = 0.022 * px;
-        for (const [da, dy] of [[0.13, -0.06], [0.1, -0.12]]) {
+        // Deux cils relevés au coin extérieur
+        g.lineWidth = 0.026 * px;
+        for (const [da, dy, la] of [[0.12, -0.08, 0.07], [0.135, -0.02, 0.06]]) {
           g.beginPath();
           g.moveTo(x + cote * da * px, y + dy * px);
-          g.lineTo(x + cote * (da + 0.06) * px, y + (dy - 0.05) * px);
+          g.lineTo(x + cote * (da + la) * px, y + (dy - 0.04) * px);
           g.stroke();
         }
       }
     } else {
-      // Yeux fermés : un petit arc
+      // Yeux fermés : un arc souriant
       g.strokeStyle = trait;
-      g.lineWidth = 0.035 * px;
+      g.lineWidth = 0.04 * px;
       g.beginPath();
       g.ellipse(x, y - 0.02 * px, 0.12 * px, 0.06 * px, 0, Math.PI * 0.1, Math.PI * 0.9);
       g.stroke();
     }
-    // Sourcils
-    g.strokeStyle = fonce(a.cheveux, 0.8);
-    g.lineWidth = (a.cils ? 0.032 : 0.05) * px;
+    // Sourcils épais et arrondis
+    g.strokeStyle = a.barbe ? fonce(a.barbe, 0.9) : fonce(a.cheveux, 0.75);
+    g.lineWidth = (a.barbe ? 0.07 : 0.042) * px;
     g.beginPath();
-    g.moveTo(X(cote * 0.18), Y(1.38));
-    g.quadraticCurveTo(X(cote * 0.33), Y(a.cils ? 1.3 : 1.33), X(cote * 0.47), Y(1.4));
+    g.moveTo(X(cote * 0.2), Y(1.36));
+    g.quadraticCurveTo(X(cote * 0.35), Y(1.27), X(cote * 0.5), Y(1.35));
     g.stroke();
   }
 
-  // Bouche : un sourire, avec la lèvre du bas
-  if (a.levres) {
-    g.fillStyle = a.levres;
+  // Bouche
+  if (a.bouche === 'ouverte') {
+    // Grand sourire ouvert : dents en haut, langue en bas
+    g.save();
     g.beginPath();
-    g.ellipse(X(0), Y(2.12), 0.09 * px, 0.035 * px, 0, 0, Math.PI);
+    g.moveTo(X(-0.2), Y(2.04));
+    g.quadraticCurveTo(X(0), Y(2.09), X(0.2), Y(2.04));
+    g.bezierCurveTo(X(0.17), Y(2.3), X(-0.17), Y(2.3), X(-0.2), Y(2.04));
+    g.closePath();
+    g.fillStyle = '#7a2a2c';
     g.fill();
+    g.clip();
+    g.fillStyle = '#ffffff';
+    g.fillRect(X(-0.2), Y(2.0), 0.4 * px, 0.105 * px);
+    g.fillStyle = '#e07b80';
+    g.beginPath();
+    g.ellipse(X(0), Y(2.25), 0.1 * px, 0.06 * px, 0, 0, Math.PI * 2);
+    g.fill();
+    g.restore();
+  } else {
+    g.strokeStyle = '#6e302b';
+    g.lineWidth = 0.038 * px;
+    g.beginPath();
+    g.ellipse(X(0), Y(1.99), 0.16 * px, 0.1 * px, 0, Math.PI * 0.18, Math.PI * 0.82);
+    g.stroke();
   }
-  g.strokeStyle = a.barbe ? '#e2a99c' : '#8c4a44';
-  g.lineWidth = 0.03 * px;
+  return c;
+}
+
+/** Un tissu imprimé de fleurs et de feuilles, qui se répète sans raccord visible */
+function dessinerFleurs(fond: string, fleurs: string): HTMLCanvasElement {
+  const T = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = T;
+  const g = c.getContext('2d')!;
+  g.fillStyle = fond;
+  g.fillRect(0, 0, T, T);
+  g.fillStyle = fleurs;
+  g.strokeStyle = fleurs;
+  const h = hasard(11);
+  // Chaque forme est dessinée aussi de l'autre côté des bords, pour que le motif se raccorde
+  const partout = (x: number, y: number, dessin: (x: number, y: number) => void) => {
+    for (const dx of [-T, 0, T]) for (const dy of [-T, 0, T]) dessin(x + dx, y + dy);
+  };
+  for (let i = 0; i < 13; i++) {
+    const x = h() * T;
+    const y = h() * T;
+    const r = 12 + h() * 9;
+    const rot = h() * Math.PI;
+    partout(x, y, (x, y) => {
+      // Fleur : cinq gros pétales ronds
+      for (let p = 0; p < 5; p++) {
+        const an = rot + (p / 5) * Math.PI * 2;
+        g.beginPath();
+        g.arc(x + Math.cos(an) * r * 0.62, y + Math.sin(an) * r * 0.62, r * 0.55, 0, Math.PI * 2);
+        g.fill();
+      }
+    });
+  }
+  for (let i = 0; i < 22; i++) {
+    const x = h() * T;
+    const y = h() * T;
+    const an = h() * Math.PI * 2;
+    partout(x, y, (x, y) => {
+      // Feuille sur sa tige
+      g.lineWidth = 3;
+      g.beginPath();
+      g.moveTo(x, y);
+      g.quadraticCurveTo(x + Math.cos(an + 0.6) * 14, y + Math.sin(an + 0.6) * 14, x + Math.cos(an) * 24, y + Math.sin(an) * 24);
+      g.stroke();
+      g.beginPath();
+      g.ellipse(x + Math.cos(an) * 28, y + Math.sin(an) * 28, 9, 5, an, 0, Math.PI * 2);
+      g.fill();
+    });
+  }
+  return c;
+}
+
+/** Le logo du t-shirt : un trèfle à trois feuilles au-dessus d'un bol de nouilles, dessiné au trait */
+function dessinerLogo(couleur: string): HTMLCanvasElement {
+  const T = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = T;
+  const g = c.getContext('2d')!;
+  g.strokeStyle = couleur;
+  g.lineWidth = 9;
+  g.lineCap = 'round';
+  g.lineJoin = 'round';
+  // Trèfle : trois feuilles en éventail
+  for (const an of [-0.75, 0, 0.75]) {
+    g.save();
+    g.translate(128, 108);
+    g.rotate(an);
+    g.beginPath();
+    g.ellipse(0, -34, 17, 34, 0, 0, Math.PI * 2);
+    g.stroke();
+    g.restore();
+  }
+  // Baguettes
   g.beginPath();
-  g.ellipse(X(0), Y(2.06), 0.13 * px, 0.07 * px, 0, Math.PI * 0.15, Math.PI * 0.85);
+  g.moveTo(150, 100);
+  g.lineTo(205, 70);
+  g.moveTo(158, 112);
+  g.lineTo(212, 88);
+  g.stroke();
+  // Nouilles qui sortent du bol
+  for (const x of [112, 128, 144]) {
+    g.beginPath();
+    g.moveTo(x, 150);
+    g.bezierCurveTo(x - 8, 135, x + 8, 125, x, 108);
+    g.stroke();
+  }
+  // Bol
+  g.beginPath();
+  g.moveTo(66, 150);
+  g.lineTo(190, 150);
+  g.bezierCurveTo(186, 200, 160, 220, 128, 220);
+  g.bezierCurveTo(96, 220, 70, 200, 66, 150);
+  g.closePath();
+  g.stroke();
+  g.beginPath();
+  g.moveTo(108, 232);
+  g.lineTo(148, 232);
   g.stroke();
   return c;
 }
@@ -487,25 +624,55 @@ export class Modele {
     regrouper(this.racine);
   }
 
+  /** Le tissu du pantalon : uni, ou imprimé à fleurs */
+  private materiauPantalon(): THREE.Material {
+    const a = this.a;
+    if (!a.pantalonMotif || a.simple) return mat(a.pantalon);
+    const tex = new THREE.CanvasTexture(dessinerFleurs(a.pantalonMotif.fond, a.pantalonMotif.fleurs));
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(2, 1.4);
+    tex.anisotropy = 4;
+    return new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85 });
+  }
+
   private construireJambes() {
     const a = this.a;
-    piece(this.bassin, tour([[0.16, -0.1], [0.2, -0.05], [0.205, 0.04], [0.19, 0.11]]), a.pantalon, [0, 0, 0]);
+    const tissu = this.materiauPantalon();
+    const morceau = (parent: THREE.Object3D, geo: THREE.BufferGeometry, y: number) => {
+      const m = new THREE.Mesh(geo, tissu);
+      m.position.y = y;
+      m.castShadow = true;
+      parent.add(m);
+    };
+    // Largeur des jambes : [cuisse en haut, cuisse en bas, genou, bas du pantalon]
+    const l =
+      a.pantalonForme === 'evase' ? [0.11, 0.11, 0.11, 0.15] : a.pantalonForme === 'large' ? [0.098, 0.092, 0.092, 0.095] : [0.088, 0.07, 0.07, 0.056];
+    morceau(this.bassin, tour([[0.16, -0.1], [0.2, -0.05], [Math.max(0.205, l[0] + 0.115), 0.04], [0.19, 0.11]]), 0);
+    const ballerines = a.chaussuresForme === 'ballerines';
     const clair = new THREE.Color(a.chaussures).getHSL({ h: 0, s: 0, l: 0 }).l > 0.7;
     const semelle = clair ? '#cfc8bd' : fonce(a.chaussures, 0.6);
     for (const cote of [1, -1]) {
       const hanche = new THREE.Group();
       hanche.position.set(cote * 0.1, -0.02, 0);
       this.bassin.add(hanche);
-      piece(hanche, new THREE.CylinderGeometry(0.088, 0.07, 0.34, 12), a.pantalon, [0, -0.17, 0]);
+      morceau(hanche, new THREE.CylinderGeometry(l[0], l[1], 0.34, 14), -0.17);
 
       const genou = new THREE.Group();
       genou.position.y = -0.34;
       hanche.add(genou);
-      piece(genou, new THREE.SphereGeometry(0.07, 12, 8), a.pantalon, [0, 0, 0]);
-      piece(genou, new THREE.CylinderGeometry(0.068, 0.056, 0.3, 12), a.pantalon, [0, -0.15, 0]);
-      // Basket arrondie avec sa semelle
-      piece(genou, new THREE.CapsuleGeometry(0.052, 0.11, 4, 10), a.chaussures, [0, -0.33, 0.035], [1.05, 0.85, 1], [Math.PI / 2, 0, 0]);
-      if (!a.simple) piece(genou, new THREE.BoxGeometry(0.105, 0.022, 0.22), semelle, [0, -0.357, 0.035]);
+      morceau(genou, new THREE.SphereGeometry(l[2], 14, 8), 0);
+      // Un pantalon ample descend un peu plus bas, sur la chaussure
+      const bas = l[3] > 0.06 ? 0.32 : 0.3;
+      morceau(genou, new THREE.CylinderGeometry(l[2], l[3], bas, 14, 1, l[3] > 0.06), -bas / 2);
+      if (ballerines) {
+        // Ballerine : plate et basse
+        piece(genou, new THREE.CapsuleGeometry(0.05, 0.11, 4, 10), a.chaussures, [0, -0.345, 0.04], [1.05, 0.55, 1], [Math.PI / 2, 0, 0]);
+      } else {
+        // Basket arrondie avec sa semelle
+        piece(genou, new THREE.CapsuleGeometry(0.054, 0.11, 4, 10), a.chaussures, [0, -0.33, 0.035], [1.1, 0.85, 1], [Math.PI / 2, 0, 0]);
+        if (!a.simple) piece(genou, new THREE.BoxGeometry(0.11, 0.022, 0.22), semelle, [0, -0.357, 0.035]);
+      }
 
       this.hanches.push(hanche);
       this.genoux.push(genou);
@@ -529,12 +696,25 @@ export class Modele {
         piece(t, new THREE.CylinderGeometry(0.012, 0.012, 0.01, 8), fonce(a.haut, 0.7), [-0.1, y, 0.168], undefined, [Math.PI / 2, 0, 0]);
       }
     } else {
-      piece(t, tour(buste), a.haut, [0, 0, 0]);
+      // Style figurine : le t-shirt descend un peu sur le pantalon
+      const ventre: [number, number][] = [[0.235, -0.07], [0.232, 0.03], [0.215, 0.13], [0.2, 0.25], ...buste.slice(3)];
+      piece(t, tour(a.style === 'mii' ? ventre : buste), a.haut, [0, 0, 0]);
       piece(t, new THREE.CylinderGeometry(0.064, 0.07, 0.12, 12), a.peau, [0, 0.58, 0]);
       if (!a.simple) piece(t, new THREE.TorusGeometry(0.075, 0.012, 6, 14), fonce(a.haut, 0.85), [0, 0.548, 0], [1, 0.82, 1], [Math.PI / 2, 0, 0]);
     }
 
-    if (a.motif && !a.simple) {
+    if (a.motif && !a.simple && a.style === 'mii') {
+      // Logo dessiné sur la poitrine, côté gauche
+      const tex = new THREE.CanvasTexture(dessinerLogo(a.motif));
+      tex.colorSpace = THREE.SRGBColorSpace;
+      const logo = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.1, 0.1),
+        new THREE.MeshStandardMaterial({ map: tex, transparent: true, roughness: 0.8, polygonOffset: true, polygonOffsetFactor: -2 }),
+      );
+      logo.position.set(0.08, 0.36, 0.147);
+      logo.rotation.y = 0.42;
+      t.add(logo);
+    } else if (a.motif && !a.simple) {
       // Petit dessin sur le t-shirt
       const motif = new THREE.Group();
       motif.position.set(0, 0.34, 0.152);
@@ -551,31 +731,49 @@ export class Modele {
     const a = this.a;
     const courtes = a.manches === 'courtes';
     const avantBras = courtes ? a.peau : a.haut;
+    // Style figurine : des bras plus dodus
+    const e = a.style === 'mii' ? 1.2 : 1;
     for (const cote of [1, -1]) {
       const epaule = new THREE.Group();
       epaule.position.set(cote * 0.228, 0.45, 0);
       this.torse.add(epaule);
-      piece(epaule, new THREE.SphereGeometry(0.064, 12, 8), a.haut, [0, -0.025, 0]);
+      piece(epaule, new THREE.SphereGeometry(0.064 * e, 12, 8), a.haut, [0, -0.025, 0]);
       if (courtes) {
-        piece(epaule, new THREE.CylinderGeometry(0.078, 0.075, 0.13, 12), a.haut, [0, -0.07, 0]);
-        piece(epaule, new THREE.CylinderGeometry(0.056, 0.05, 0.2, 12), a.peau, [0, -0.16, 0]);
+        piece(epaule, new THREE.CylinderGeometry(0.078 * e, 0.075 * e, 0.13, 12), a.haut, [0, -0.07, 0]);
+        piece(epaule, new THREE.CylinderGeometry(0.056 * e, 0.05 * e, 0.2, 12), a.peau, [0, -0.16, 0]);
       } else {
-        piece(epaule, new THREE.CylinderGeometry(0.068, 0.06, 0.27, 12), a.haut, [0, -0.13, 0]);
+        piece(epaule, new THREE.CylinderGeometry(0.068 * e, 0.06 * e, 0.27, 12), a.haut, [0, -0.13, 0]);
       }
 
       const coude = new THREE.Group();
       coude.position.y = -0.27;
       epaule.add(coude);
-      piece(coude, new THREE.SphereGeometry(courtes ? 0.05 : 0.059, 10, 8), avantBras, [0, 0, 0]);
-      piece(coude, new THREE.CylinderGeometry(courtes ? 0.05 : 0.058, courtes ? 0.042 : 0.054, 0.22, 12), avantBras, [0, -0.11, 0]);
+      piece(coude, new THREE.SphereGeometry((courtes ? 0.05 : 0.059) * e, 10, 8), avantBras, [0, 0, 0]);
+      piece(coude, new THREE.CylinderGeometry((courtes ? 0.05 : 0.058) * e, (courtes ? 0.042 : 0.054) * e, 0.22, 12), avantBras, [0, -0.11, 0]);
       if (!courtes && !a.simple) piece(coude, new THREE.CylinderGeometry(0.058, 0.058, 0.03, 12), fonce(a.haut, 0.9), [0, -0.21, 0]);
 
       // Main : paume et pouce
       const main = new THREE.Group();
       main.position.y = -0.255;
       coude.add(main);
-      piece(main, new THREE.SphereGeometry(0.05, 12, 8), a.peau, [0, -0.025, 0], [0.72, 1.12, 0.95]);
-      if (!a.simple) piece(main, new THREE.SphereGeometry(0.02, 8, 6), a.peau, [-cote * 0.03, -0.012, 0.03], [1, 1.6, 1], [0.4, 0, 0]);
+      if (a.style === 'mii') {
+        // Main ronde en moufle, comme une figurine
+        piece(main, new THREE.SphereGeometry(0.068, 14, 10), a.peau, [0, -0.04, 0], [0.85, 1, 0.85]);
+      } else {
+        piece(main, new THREE.SphereGeometry(0.05, 12, 8), a.peau, [0, -0.025, 0], [0.72, 1.12, 0.95]);
+        if (!a.simple) piece(main, new THREE.SphereGeometry(0.02, 8, 6), a.peau, [-cote * 0.03, -0.012, 0.03], [1, 1.6, 1], [0.4, 0, 0]);
+      }
+      // Bracelet de perles au poignet droit
+      if (a.bracelet && cote === -1) {
+        const perles: THREE.BufferGeometry[] = [];
+        for (let i = 0; i < 12; i++) {
+          const an = (i / 12) * Math.PI * 2;
+          const g = new THREE.SphereGeometry(0.012, 8, 6);
+          g.translate(Math.cos(an) * 0.044 * e, -0.2, Math.sin(an) * 0.044 * e);
+          perles.push(g);
+        }
+        fusion(coude, perles, a.bracelet, true);
+      }
 
       this.epaules.push(epaule);
       this.coudes.push(coude);
@@ -843,13 +1041,14 @@ export class Modele {
   private construireTeteMii() {
     const a = this.a;
     const t = this.tete;
-    t.position.y = 0.9;
+    t.position.y = 0.94;
     piece(t, new THREE.SphereGeometry(RM, 36, 28), a.peau, [0, 0, 0], [1, 1.06, 0.98]);
     for (const cote of [1, -1]) {
-      piece(t, new THREE.SphereGeometry(0.055, 14, 10), a.peau, [cote * RM * 0.98, -0.01, 0], [0.45, 0.9, 0.7]);
+      piece(t, new THREE.SphereGeometry(0.06, 14, 10), a.peau, [cote * RM * 0.98, -0.02, 0], [0.45, 0.9, 0.7]);
     }
-    // Petit nez rond
-    piece(t, new THREE.SphereGeometry(0.024, 16, 12), a.peau, [0, -0.07, RM * 0.975], [1, 0.85, 0.75]);
+    // Gros nez rond, un peu rosé
+    const nez = '#' + new THREE.Color(a.peau).lerp(new THREE.Color('#e48a78'), 0.4).getHexString();
+    piece(t, new THREE.SphereGeometry(0.048, 18, 14), nez, [0, -0.03, RM * 0.955], [1.05, 0.9, 0.8]);
 
     // Le visage dessiné, posé sur l'avant de la tête comme un autocollant
     const ouvert = new THREE.CanvasTexture(dessinerVisage(a, true));
@@ -872,83 +1071,146 @@ export class Modele {
     else this.cheveuxMiiCourts();
   }
 
-  /** Une calotte de cheveux lisse, inclinée vers l'arrière pour dégager le front */
-  private calotteMii(couleur: string, ouverture: number, inclinaison: number, rayon = 1.06) {
-    const g = new THREE.SphereGeometry(RM * rayon, 36, 18, 0, Math.PI * 2, 0, ouverture);
+  /** Une calotte de cheveux lisse, inclinée vers l'arrière pour dégager le front. "raie" creuse une raie au milieu */
+  private calotteMii(couleur: string, ouverture: number, inclinaison: number, rayon = 1.06, raie = false) {
+    const g = new THREE.SphereGeometry(RM * rayon, 40, 20, 0, Math.PI * 2, 0, ouverture);
     g.rotateX(inclinaison);
+    if (raie) {
+      const p = g.attributes.position as THREE.BufferAttribute;
+      const v = new THREE.Vector3();
+      for (let i = 0; i < p.count; i++) {
+        v.fromBufferAttribute(p, i);
+        if (v.z <= 0 && v.y < RM * 0.9) continue;
+        v.multiplyScalar(1 - 0.05 * Math.exp(-((v.x / 0.025) ** 2)));
+        p.setXYZ(i, v.x, v.y, v.z);
+      }
+      g.computeVertexNormals();
+    }
     g.scale(1, 1.06, 0.98);
-    const m = new THREE.Mesh(g, mat(couleur, { double: true }));
+    const m = new THREE.Mesh(g, mat(couleur, { double: true, doux: true }));
     m.castShadow = true;
     this.cheveux.add(m);
   }
 
-  /** Cheveux courts façon Mii : quelques grosses mèches rondes sur le dessus et sur le front */
-  private cheveuxMiiCourts() {
-    const a = this.a;
-    this.calotteMii(a.cheveux, 1.3, -0.42);
-    // L'arrière de la tête, jusqu'à la nuque
-    const arriere = new THREE.SphereGeometry(RM * 1.05, 32, 18, Math.PI / 2 + 1.0, Math.PI * 2 - 2.0, 0, 2.05);
-    arriere.scale(1, 1.06, 0.98);
-    this.cheveux.add(new THREE.Mesh(arriere, mat(a.cheveux, { double: true })));
-
-    const morceaux: THREE.BufferGeometry[] = [];
-    const bosse = (x: number, y: number, z: number, r: number, sx = 1, sy = 1, sz = 1, rz = 0) => {
-      const g = new THREE.SphereGeometry(r, 16, 12);
-      g.scale(sx, sy, sz);
-      g.rotateZ(rz);
-      g.translate(x, y, z);
-      morceaux.push(g);
-    };
-    // Volume ondulé sur le dessus
-    for (const [x, y, z, r] of [
-      [0, 0.25, 0.02, 0.12], [-0.12, 0.22, 0.05, 0.1], [0.12, 0.22, 0.05, 0.1],
-      [-0.09, 0.21, -0.12, 0.11], [0.09, 0.21, -0.12, 0.11], [0, 0.2, 0.13, 0.1],
-      [-0.2, 0.12, 0.0, 0.09], [0.2, 0.12, 0.0, 0.09],
-    ]) bosse(x, y, z, r);
-    // Mèches qui retombent sur le front, un peu de travers
-    for (const [x, rz] of [[-0.12, 0.5], [-0.04, 0.25], [0.05, -0.05], [0.13, -0.35]]) {
-      bosse(x, 0.15, 0.2, 0.075, 0.8, 1.15, 0.6, rz);
+  /**
+   * Une grosse mèche en pâte à modeler : une goutte allongée, posée à plat sur la tête.
+   * theta : depuis le haut de la tête, phi : autour de la tête (0 = devant).
+   */
+  private meche(theta: number, phi: number, largeur: number, longueur: number, epaisseur: number, torsion: number, rayon = RM * 1.05) {
+    const n = new THREE.Vector3(Math.sin(theta) * Math.sin(phi), Math.cos(theta), Math.sin(theta) * Math.cos(phi));
+    // Vers le haut de la tête, le long de la surface
+    const haut = new THREE.Vector3(-Math.cos(theta) * Math.sin(phi), Math.sin(theta), -Math.cos(theta) * Math.cos(phi));
+    haut.applyAxisAngle(n, torsion);
+    const cote = new THREE.Vector3().crossVectors(haut, n);
+    const g = new THREE.SphereGeometry(1, 12, 9);
+    // Plus large en bas qu'en haut, comme une goutte
+    const p = g.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) {
+      const y = p.getY(i);
+      const f = 1 - 0.35 * Math.max(0, y);
+      p.setXYZ(i, p.getX(i) * f, y, p.getZ(i) * f);
     }
-    fusion(this.cheveux, morceaux, a.cheveux);
+    g.scale(largeur, longueur, epaisseur);
+    g.applyMatrix4(new THREE.Matrix4().makeBasis(cote, haut, n));
+    g.translate(n.x * rayon, n.y * rayon * 1.06, n.z * rayon * 0.98);
+    return g;
   }
 
-  /** Longs cheveux bouclés façon Mii : un gros nuage de boucles rondes jusqu'au milieu du dos */
-  private cheveuxMiiLongs() {
+  /** Cheveux courts façon figurine : de grosses mèches rondes qui partent du sommet et retombent sur le front */
+  private cheveuxMiiCourts() {
     const a = this.a;
-    this.calotteMii(a.cheveux, 1.32, -0.62);
+    this.calotteMii(a.cheveux, 1.3, -0.4);
+    // L'arrière de la tête, jusqu'à la nuque
+    const arriere = new THREE.SphereGeometry(RM * 1.05, 32, 18, Math.PI / 2 + 1.0, Math.PI * 2 - 2.0, 0, 2.45);
+    arriere.scale(1, 1.06, 0.98);
+    const ma = new THREE.Mesh(arriere, mat(a.cheveux, { double: true, doux: true }));
+    ma.castShadow = true;
+    this.cheveux.add(ma);
+
+    const h = hasard(7);
     const fonces: THREE.BufferGeometry[] = [];
     const clairs: THREE.BufferGeometry[] = [];
-    const h = hasard(21);
-    let n = 0;
-    // Des rangées de boucles, de plus en plus larges en descendant
-    // Une masse lisse dessous, pour qu'on ne voie pas à travers les boucles
-    const masse = tour([[0.22, 0.12], [0.28, 0.0], [0.3, -0.25], [0.29, -0.45], [0.22, -0.56]], 0.9, Math.PI / 2 + 0.55, Math.PI - 1.1, 20);
-    const mm = new THREE.Mesh(masse, mat(fonce(a.cheveux, 0.9), { double: true }));
-    mm.castShadow = true;
-    this.cheveux.add(mm);
-    for (let rang = 0; rang < 10; rang++) {
-      const y = 0.13 - rang * 0.07;
-      const ecart = RM * 0.95 + 0.03 + rang * 0.017;
-      const nb = 19;
-      for (let k = 0; k < nb; k++) {
-        // De la tempe droite à la tempe gauche en passant par l'arrière (le visage reste dégagé)
-        const angle = 1.02 + ((Math.PI * 2 - 2.04) * k) / (nb - 1) + (rang % 2) * 0.08;
-        // Plus long dans le dos que sur les côtés, avec un bas irrégulier
-        const longueur = 7 + Math.round(-Math.cos(angle) * 2.5);
-        if (rang > longueur || (rang === longueur && h() < 0.4)) continue;
-        let x = Math.sin(angle) * ecart;
-        let z = Math.cos(angle) * ecart * 0.95;
-        // Devant, les boucles tombent sur les épaules et sur la poitrine
-        if (Math.cos(angle) > 0.2 && y < -0.3) z += 0.06;
-        if (y < -0.35) x *= 1.08;
-        const r = 0.058 + h() * 0.02;
-        const g = new THREE.SphereGeometry(r, 10, 8);
-        g.translate(x, y + (h() - 0.5) * 0.03, z);
-        (n++ % 4 === 0 ? clairs : fonces).push(g);
+    let k = 0;
+    const ajouter = (g: THREE.BufferGeometry) => (k++ % 3 === 0 ? clairs : fonces).push(g);
+    // Rangées de grosses mèches, du sommet vers le bas : [theta, nombre, longueur]
+    const rangs: [number, number, number][] = [
+      [0.32, 6, 0.13],
+      [0.72, 10, 0.14],
+    ];
+    for (const [theta, nb, longueur] of rangs) {
+      for (let i = 0; i < nb; i++) {
+        const phi = (i / nb) * Math.PI * 2 + theta * 1.7 + (h() - 0.5) * 0.15;
+        ajouter(this.meche(theta + (h() - 0.5) * 0.06, phi, 0.1 + h() * 0.015, longueur + h() * 0.02, 0.055, (h() - 0.5) * 0.5, RM * 1.04));
       }
     }
-    fusion(this.cheveux, fonces, a.cheveux);
-    fusion(this.cheveux, clairs, a.reflets);
+    // Frange : de grosses mèches qui retombent sur le front, un peu de travers
+    for (let i = 0; i < 5; i++) {
+      const phi = -0.68 + i * 0.34 + (h() - 0.5) * 0.08;
+      ajouter(this.meche(1.0 + h() * 0.05, phi, 0.09, 0.13 + h() * 0.02, 0.05, -phi * 0.35 + (h() - 0.5) * 0.3, RM * 1.06));
+    }
+    // Côtés au-dessus des oreilles, et arrière jusqu'à la nuque
+    for (let i = 0; i < 11; i++) {
+      const phi = 1.05 + (i / 10) * (Math.PI * 2 - 2.1);
+      ajouter(this.meche(1.22 + (h() - 0.5) * 0.08, phi, 0.1, 0.14, 0.05, (h() - 0.5) * 0.4, RM * 1.07));
+      if (Math.cos(phi) < -0.3) ajouter(this.meche(1.75 + h() * 0.08, phi + 0.15, 0.1, 0.15, 0.045, (h() - 0.5) * 0.4, RM * 1.06));
+    }
+    fusion(this.cheveux, fonces, a.cheveux, true);
+    fusion(this.cheveux, clairs, a.reflets, true);
+  }
+
+  /** Longs cheveux ondulés façon figurine : raie au milieu, et de grosses mèches en vagues qui s'évasent jusqu'à la poitrine */
+  private cheveuxMiiLongs() {
+    const a = this.a;
+    this.calotteMii(a.cheveux, 1.45, -0.5, 1.06, true);
+    // Une masse lisse dessous, pour qu'on ne voie pas à travers les mèches
+    const masse = tour([[0.33, 0.02], [0.4, -0.15], [0.48, -0.35], [0.53, -0.55], [0.5, -0.72]], 0.85, Math.PI / 2 + 0.5, Math.PI - 1.0, 24);
+    const mm = new THREE.Mesh(masse, mat(fonce(a.cheveux, 0.85), { double: true, doux: true }));
+    mm.castShadow = true;
+    this.cheveux.add(mm);
+
+    const h = hasard(21);
+    const fonces: THREE.BufferGeometry[] = [];
+    const clairs: THREE.BufferGeometry[] = [];
+    // Deux couches de mèches tout autour, en laissant le visage dégagé
+    for (const couche of [0, 1]) {
+      const nb = couche === 0 ? 18 : 16;
+      for (let i = 0; i < nb; i++) {
+        const u = (i + couche * 0.5) / (nb - 1 + couche);
+        const phi = 0.8 + u * (Math.PI * 2 - 1.6);
+        const devant = Math.cos(phi); // 1 = devant, -1 = derrière
+        // Devant, les mèches partent de la raie ; derrière, de plus bas
+        const depart = 0.55 + couche * 0.25 + Math.max(0, -devant) * 0.2;
+        const longueur = 0.88 + (h() - 0.5) * 0.1 - devant * 0.06;
+        const vague = h() * Math.PI * 2;
+        const points: THREE.Vector3[] = [];
+        for (let s = 0; s <= 10; s++) {
+          const f = s / 10;
+          // On suit la tête jusqu'à la tempe, puis on retombe en s'écartant (volume en triangle)
+          const theta = Math.min(depart + f * 3, Math.PI / 2 + 0.05);
+          const g0 = Math.max(0, (f - 0.2) / 0.8);
+          const evase = Math.sin(Math.min(1, g0 / 0.7) * Math.PI / 2);
+          const ecart = RM * (0.98 + couche * 0.07 * g0) * Math.sin(theta) + evase * 0.24 + Math.sin(f * Math.PI * 3 + vague) * 0.04 * g0;
+          const y = Math.cos(theta) * RM * 1.06 - Math.max(0, f - 0.25) * longueur;
+          const p = new THREE.Vector3(Math.sin(phi) * ecart, y, Math.cos(phi) * ecart * 0.95);
+          // Le bas des mèches de devant tombe un peu en avant, sur les épaules
+          if (devant > 0) p.z += g0 * g0 * 0.12 * devant;
+          // Oscillation sur le côté : l'effet "ondulé"
+          const lateral = Math.sin(f * Math.PI * 3.5 + vague) * 0.045 * g0;
+          p.x += Math.cos(phi) * lateral;
+          p.z -= Math.sin(phi) * lateral;
+          points.push(p);
+        }
+        const epais = 0.072 + h() * 0.012;
+        // Fine au départ (cachée sous la calotte), épaisse au milieu, arrondie au bout
+        const g = tube(points, epais, epais * 0.6, 8, 30, (t) => epais * (t < 0.15 ? 0.4 + 4 * t : 1 - 0.65 * Math.max(0, t - 0.5) * 2));
+        const bout = new THREE.SphereGeometry(epais * 0.35, 8, 6);
+        bout.translate(points[10].x, points[10].y, points[10].z);
+        const liste = (i + couche) % 3 === 0 ? clairs : fonces;
+        liste.push(g, bout);
+      }
+    }
+    fusion(this.cheveux, fonces, a.cheveux, true);
+    fusion(this.cheveux, clairs, a.reflets, true);
   }
 
   /** Place les membres selon l'état demandé */
