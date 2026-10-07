@@ -24,12 +24,12 @@ Cocher les cases au fur et à mesure.
 
 **Validation** : se promener est agréable sur le support principal.
 
-## Étape 2 : Le maître du jeu
+## Étape 2 : Le maître du jeu (PNJ)
 
-- [ ] Placeholder du MJ dans le monde
+- [ ] Placeholder du MJ dans le monde : un PNJ automatique, personne ne le contrôle
 - [ ] Système de dialogue (bulle, avancer d'un tap ou d'un clic) alimenté par `dialogues.json`
 - [ ] Introduction jouée au lancement
-- [ ] Le MJ peut se déplacer ou se téléporter vers un point donné
+- [ ] Le MJ se déplace tout seul (script) ou se téléporte vers un point donné
 
 **Validation** : l'intro se joue, les dialogues sont lisibles sur téléphone.
 
@@ -39,6 +39,7 @@ Cocher les cases au fur et à mesure.
 - [ ] Zones de souvenirs avec marqueur visible
 - [ ] Déclenchement : fondu, séquence jouée (cinématique des avatars, puis 2 à 4 actions simples de la joueuse), carte souvenir (photo + texte), répliques du MJ
 - [ ] Déblocage dans l'ordre, compteur, indicateur vers le prochain souvenir
+- [ ] Retour au pré après chaque souvenir, le MJ va attendre près du suivant, trace laissée dans le pré (polaroid sur chevalet)
 - [ ] Sauvegarde de la progression dans `localStorage`
 
 **Validation** : on peut enchaîner les 2 souvenirs de test sans bug.
@@ -71,6 +72,7 @@ Cocher les cases au fur et à mesure.
 ## Étape 7 : Finitions
 
 - [ ] Musique et effets sonores
+- [ ] Option : répliques enregistrées avec la voix d'Olivier
 - [ ] Monde principal décoré (végétation, chemins, lumière de fin de journée)
 - [ ] Surprise finale soignée
 - [ ] Optimisation : poids des assets, fluidité sur téléphone
