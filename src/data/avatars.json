@@ -1,5 +1,6 @@
 {
   "joueuse": {
+    "style": "mii",
     "taille": 1,
     "peau": "#f4d3c2",
     "joues": "#eaa092",
@@ -20,6 +21,7 @@
     "modele3d": null
   },
   "mj": {
+    "style": "mii",
     "taille": 1.05,
     "peau": "#e9b998",
     "joues": null,

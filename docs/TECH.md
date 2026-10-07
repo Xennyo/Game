@@ -113,6 +113,7 @@ La progression (intro vue, nombre de souvenirs débloqués) est gardée dans le 
 
 Première version (octobre 2026), gardée comme avatar de secours : les avatars sont **construits directement dans le code** (`src/game/Modele.ts`) à partir de formes simples, dans un style low poly « figurine », d'après les photos fournies par Olivier. Pas besoin d'outil d'IA, de Mixamo ni de Blender, et rien à télécharger : c'est léger, fiable et modifiable à tout moment.
 
+- **Style** : `"style": "mii"` (choix d'Olivier, octobre 2026) donne une grosse tête ronde, un visage dessiné (yeux, sourcils, sourire, barbe et taches de rousseur peints sur une image, avec une version yeux fermés pour cligner) et des coiffures simples et rondes. Sans ce champ, on retrouve le style détaillé
 - **Apparence** dans `src/data/avatars.json` : taille, couleurs (peau, yeux, lèvres, cheveux et reflets, haut, pull intérieur, pantalon, chaussures), coiffure (`longue-bouclee` : une cinquantaine de mèches en anglaises ; `courte-ondulee` : mèches courtes qui retombent sur le front), barbe (courte, bords fondus, la peau transparaît un peu), cils, taches de rousseur, joues, manches (`longues` ou `courtes`), motif sur le t-shirt. Changer une couleur ne demande pas de toucher au code
 - **Visage** : tête en forme d'œuf, yeux avec iris, pupille, reflets et paupière, sourcils, nez, sourire. Les zones de cheveux et de barbe épousent la forme de la tête
 - **Légèreté** : dans chaque articulation, les morceaux de même couleur sont fusionnés (environ 25 000 triangles par avatar)

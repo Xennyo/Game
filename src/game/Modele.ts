@@ -23,6 +23,8 @@ export interface Apparence {
   chaussures: string;
   /** Sans visage ni détails : pour les figurants */
   simple?: boolean;
+  /** 'mii' : grosse tête ronde, visage dessiné, coiffure simple. Sinon : style détaillé */
+  style?: string;
 }
 
 /** Ce que l'animation doit montrer à cet instant */
@@ -314,6 +316,139 @@ function regrouper(objet: THREE.Object3D) {
   }
 }
 
+/** Style Mii : rayon de la tête, et la zone de la tête couverte par le dessin du visage */
+const RM = 0.27;
+const VIS_PHI = 1.65;
+const VIS_T0 = 0.5;
+const VIS_T1 = 2.95;
+const VIS_L = 1024;
+const VIS_H = 768;
+
+/**
+ * Dessine le visage façon Mii sur une image. On place les traits avec des angles :
+ * a = vers la droite de l'écran (0 = milieu du visage), t = depuis le haut de la tête (1,57 = mi-hauteur).
+ */
+function dessinerVisage(a: Apparence, yeuxOuverts: boolean): HTMLCanvasElement {
+  const c = document.createElement('canvas');
+  c.width = VIS_L;
+  c.height = VIS_H;
+  const g = c.getContext('2d')!;
+  const X = (ang: number) => ((ang + VIS_PHI) / (VIS_PHI * 2)) * VIS_L;
+  const Y = (t: number) => ((t - VIS_T0) / (VIS_T1 - VIS_T0)) * VIS_H;
+  const px = VIS_L / (VIS_PHI * 2); // pixels par radian, à peu près pareil en hauteur
+  const trait = '#2b1e18';
+  g.lineCap = 'round';
+  g.lineJoin = 'round';
+
+  // Barbe : une zone sur la mâchoire et le menton, avec la moustache
+  if (a.barbe) {
+    g.fillStyle = a.barbe;
+    g.globalAlpha = 0.78;
+    g.beginPath();
+    g.moveTo(X(-1.45), Y(1.62));
+    g.bezierCurveTo(X(-1.25), Y(2.05), X(-0.75), Y(2.1), X(-0.32), Y(2.04));
+    g.bezierCurveTo(X(-0.12), Y(2.0), X(0.12), Y(2.0), X(0.32), Y(2.04));
+    g.bezierCurveTo(X(0.75), Y(2.1), X(1.25), Y(2.05), X(1.45), Y(1.62));
+    g.lineTo(X(1.5), Y(VIS_T1));
+    g.lineTo(X(-1.5), Y(VIS_T1));
+    g.closePath();
+    g.fill();
+    // Moustache
+    g.beginPath();
+    g.ellipse(X(0), Y(1.975), 0.21 * px, 0.04 * px, 0, 0, Math.PI * 2);
+    g.fill();
+    g.globalAlpha = 1;
+  }
+
+  // Joues roses et taches de rousseur
+  if (a.joues) {
+    for (const cote of [-1, 1]) {
+      const gr = g.createRadialGradient(X(cote * 0.5), Y(1.86), 0, X(cote * 0.5), Y(1.86), 0.17 * px);
+      gr.addColorStop(0, a.joues + 'aa');
+      gr.addColorStop(1, a.joues + '00');
+      g.fillStyle = gr;
+      g.fillRect(X(cote * 0.5) - 0.2 * px, Y(1.86) - 0.2 * px, 0.4 * px, 0.4 * px);
+    }
+  }
+  if (a.taches) {
+    const h = hasard(3);
+    g.fillStyle = a.taches;
+    for (let i = 0; i < 22; i++) {
+      const cote = i % 2 ? 1 : -1;
+      g.beginPath();
+      g.arc(X(cote * (0.12 + h() * 0.4)), Y(1.76 + h() * 0.16), 2.5 + h() * 1.5, 0, Math.PI * 2);
+      g.fill();
+    }
+  }
+
+  // Yeux
+  for (const cote of [-1, 1]) {
+    const x = X(cote * 0.33);
+    const y = Y(1.6);
+    if (yeuxOuverts) {
+      g.fillStyle = '#ffffff';
+      g.beginPath();
+      g.ellipse(x, y, 0.13 * px, 0.15 * px, 0, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = a.yeux;
+      g.beginPath();
+      g.ellipse(x, y + 0.015 * px, 0.085 * px, 0.11 * px, 0, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = '#16110e';
+      g.beginPath();
+      g.ellipse(x, y + 0.015 * px, 0.045 * px, 0.06 * px, 0, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = '#ffffff';
+      g.beginPath();
+      g.arc(x + 0.03 * px, y - 0.03 * px, 0.022 * px, 0, Math.PI * 2);
+      g.fill();
+      // Paupière du haut
+      g.strokeStyle = trait;
+      g.lineWidth = 0.035 * px;
+      g.beginPath();
+      g.ellipse(x, y, 0.135 * px, 0.155 * px, 0, Math.PI * 1.08, Math.PI * 1.92);
+      g.stroke();
+      if (a.cils) {
+        g.lineWidth = 0.022 * px;
+        for (const [da, dy] of [[0.13, -0.06], [0.1, -0.12]]) {
+          g.beginPath();
+          g.moveTo(x + cote * da * px, y + dy * px);
+          g.lineTo(x + cote * (da + 0.06) * px, y + (dy - 0.05) * px);
+          g.stroke();
+        }
+      }
+    } else {
+      // Yeux fermés : un petit arc
+      g.strokeStyle = trait;
+      g.lineWidth = 0.035 * px;
+      g.beginPath();
+      g.ellipse(x, y - 0.02 * px, 0.12 * px, 0.06 * px, 0, Math.PI * 0.1, Math.PI * 0.9);
+      g.stroke();
+    }
+    // Sourcils
+    g.strokeStyle = fonce(a.cheveux, 0.8);
+    g.lineWidth = (a.cils ? 0.032 : 0.05) * px;
+    g.beginPath();
+    g.moveTo(X(cote * 0.18), Y(1.38));
+    g.quadraticCurveTo(X(cote * 0.33), Y(a.cils ? 1.3 : 1.33), X(cote * 0.47), Y(1.4));
+    g.stroke();
+  }
+
+  // Bouche : un sourire, avec la lèvre du bas
+  if (a.levres) {
+    g.fillStyle = a.levres;
+    g.beginPath();
+    g.ellipse(X(0), Y(2.12), 0.09 * px, 0.035 * px, 0, 0, Math.PI);
+    g.fill();
+  }
+  g.strokeStyle = a.barbe ? '#e2a99c' : '#8c4a44';
+  g.lineWidth = 0.03 * px;
+  g.beginPath();
+  g.ellipse(X(0), Y(2.06), 0.13 * px, 0.07 * px, 0, Math.PI * 0.15, Math.PI * 0.85);
+  g.stroke();
+  return c;
+}
+
 // ---------------------------------------------------------------------------
 // Le personnage
 // ---------------------------------------------------------------------------
@@ -335,6 +470,8 @@ export class Modele {
   private coudes: THREE.Group[] = [];
   /** Pour que les deux avatars ne clignent pas des yeux en même temps */
   private decalage: number;
+  /** Style Mii : le visage est un dessin, avec une version yeux fermés pour cligner */
+  private visage: { materiau: THREE.MeshStandardMaterial; ouvert: THREE.Texture; ferme: THREE.Texture } | null = null;
 
   constructor(readonly a: Apparence) {
     this.decalage = (a.yeux.charCodeAt(2) % 10) * 0.37;
@@ -451,6 +588,10 @@ export class Modele {
     t.position.y = 0.82;
     this.torse.add(t);
     t.add(this.cheveux);
+    if (a.style === 'mii' && !a.simple) {
+      this.construireTeteMii();
+      return;
+    }
 
     piece(t, geoTete(R), a.peau, [0, 0, 0]);
     // Oreilles
@@ -695,6 +836,121 @@ export class Modele {
     this.cheveux.add(new THREE.Mesh(crane, mat(this.a.cheveux, { double: true })));
   }
 
+  // -------------------------------------------------------------------------
+  // Style Mii : une grosse tête ronde, un visage dessiné, une coiffure simple
+  // -------------------------------------------------------------------------
+
+  private construireTeteMii() {
+    const a = this.a;
+    const t = this.tete;
+    t.position.y = 0.9;
+    piece(t, new THREE.SphereGeometry(RM, 36, 28), a.peau, [0, 0, 0], [1, 1.06, 0.98]);
+    for (const cote of [1, -1]) {
+      piece(t, new THREE.SphereGeometry(0.055, 14, 10), a.peau, [cote * RM * 0.98, -0.01, 0], [0.45, 0.9, 0.7]);
+    }
+    // Petit nez rond
+    piece(t, new THREE.SphereGeometry(0.024, 16, 12), a.peau, [0, -0.07, RM * 0.975], [1, 0.85, 0.75]);
+
+    // Le visage dessiné, posé sur l'avant de la tête comme un autocollant
+    const ouvert = new THREE.CanvasTexture(dessinerVisage(a, true));
+    const ferme = new THREE.CanvasTexture(dessinerVisage(a, false));
+    for (const tex of [ouvert, ferme]) {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 4;
+    }
+    const materiau = new THREE.MeshStandardMaterial({ map: ouvert, transparent: true, roughness: 0.8, depthWrite: false });
+    const decal = new THREE.Mesh(
+      new THREE.SphereGeometry(RM * 1.004, 48, 32, Math.PI / 2 - VIS_PHI, VIS_PHI * 2, VIS_T0, VIS_T1 - VIS_T0),
+      materiau,
+    );
+    decal.scale.set(1, 1.06, 0.98);
+    decal.renderOrder = 1;
+    t.add(decal);
+    this.visage = { materiau, ouvert, ferme };
+
+    if (a.coiffure.startsWith('longue')) this.cheveuxMiiLongs();
+    else this.cheveuxMiiCourts();
+  }
+
+  /** Une calotte de cheveux lisse, inclinée vers l'arrière pour dégager le front */
+  private calotteMii(couleur: string, ouverture: number, inclinaison: number, rayon = 1.06) {
+    const g = new THREE.SphereGeometry(RM * rayon, 36, 18, 0, Math.PI * 2, 0, ouverture);
+    g.rotateX(inclinaison);
+    g.scale(1, 1.06, 0.98);
+    const m = new THREE.Mesh(g, mat(couleur, { double: true }));
+    m.castShadow = true;
+    this.cheveux.add(m);
+  }
+
+  /** Cheveux courts façon Mii : quelques grosses mèches rondes sur le dessus et sur le front */
+  private cheveuxMiiCourts() {
+    const a = this.a;
+    this.calotteMii(a.cheveux, 1.3, -0.42);
+    // L'arrière de la tête, jusqu'à la nuque
+    const arriere = new THREE.SphereGeometry(RM * 1.05, 32, 18, Math.PI / 2 + 1.0, Math.PI * 2 - 2.0, 0, 2.05);
+    arriere.scale(1, 1.06, 0.98);
+    this.cheveux.add(new THREE.Mesh(arriere, mat(a.cheveux, { double: true })));
+
+    const morceaux: THREE.BufferGeometry[] = [];
+    const bosse = (x: number, y: number, z: number, r: number, sx = 1, sy = 1, sz = 1, rz = 0) => {
+      const g = new THREE.SphereGeometry(r, 16, 12);
+      g.scale(sx, sy, sz);
+      g.rotateZ(rz);
+      g.translate(x, y, z);
+      morceaux.push(g);
+    };
+    // Volume ondulé sur le dessus
+    for (const [x, y, z, r] of [
+      [0, 0.25, 0.02, 0.12], [-0.12, 0.22, 0.05, 0.1], [0.12, 0.22, 0.05, 0.1],
+      [-0.09, 0.21, -0.12, 0.11], [0.09, 0.21, -0.12, 0.11], [0, 0.2, 0.13, 0.1],
+      [-0.2, 0.12, 0.0, 0.09], [0.2, 0.12, 0.0, 0.09],
+    ]) bosse(x, y, z, r);
+    // Mèches qui retombent sur le front, un peu de travers
+    for (const [x, rz] of [[-0.12, 0.5], [-0.04, 0.25], [0.05, -0.05], [0.13, -0.35]]) {
+      bosse(x, 0.15, 0.2, 0.075, 0.8, 1.15, 0.6, rz);
+    }
+    fusion(this.cheveux, morceaux, a.cheveux);
+  }
+
+  /** Longs cheveux bouclés façon Mii : un gros nuage de boucles rondes jusqu'au milieu du dos */
+  private cheveuxMiiLongs() {
+    const a = this.a;
+    this.calotteMii(a.cheveux, 1.32, -0.62);
+    const fonces: THREE.BufferGeometry[] = [];
+    const clairs: THREE.BufferGeometry[] = [];
+    const h = hasard(21);
+    let n = 0;
+    // Des rangées de boucles, de plus en plus larges en descendant
+    // Une masse lisse dessous, pour qu'on ne voie pas à travers les boucles
+    const masse = tour([[0.22, 0.12], [0.28, 0.0], [0.3, -0.25], [0.29, -0.45], [0.22, -0.56]], 0.9, Math.PI / 2 + 0.55, Math.PI - 1.1, 20);
+    const mm = new THREE.Mesh(masse, mat(fonce(a.cheveux, 0.9), { double: true }));
+    mm.castShadow = true;
+    this.cheveux.add(mm);
+    for (let rang = 0; rang < 10; rang++) {
+      const y = 0.13 - rang * 0.07;
+      const ecart = RM * 0.95 + 0.03 + rang * 0.017;
+      const nb = 19;
+      for (let k = 0; k < nb; k++) {
+        // De la tempe droite à la tempe gauche en passant par l'arrière (le visage reste dégagé)
+        const angle = 1.02 + ((Math.PI * 2 - 2.04) * k) / (nb - 1) + (rang % 2) * 0.08;
+        // Plus long dans le dos que sur les côtés, avec un bas irrégulier
+        const longueur = 7 + Math.round(-Math.cos(angle) * 2.5);
+        if (rang > longueur || (rang === longueur && h() < 0.4)) continue;
+        let x = Math.sin(angle) * ecart;
+        let z = Math.cos(angle) * ecart * 0.95;
+        // Devant, les boucles tombent sur les épaules et sur la poitrine
+        if (Math.cos(angle) > 0.2 && y < -0.3) z += 0.06;
+        if (y < -0.35) x *= 1.08;
+        const r = 0.058 + h() * 0.02;
+        const g = new THREE.SphereGeometry(r, 10, 8);
+        g.translate(x, y + (h() - 0.5) * 0.03, z);
+        (n++ % 4 === 0 ? clairs : fonces).push(g);
+      }
+    }
+    fusion(this.cheveux, fonces, a.cheveux);
+    fusion(this.cheveux, clairs, a.reflets);
+  }
+
   /** Place les membres selon l'état demandé */
   animer(e: EtatAnimation) {
     const s = Math.sin(e.phase);
@@ -753,6 +1009,13 @@ export class Modele {
     const cycle = (e.temps + this.decalage) % 4.3;
     const ouvert = cycle < 0.14 ? 0.12 : 1;
     for (const oeil of this.yeux) oeil.scale.y = ouvert;
+    if (this.visage) {
+      const tex = ouvert < 1 ? this.visage.ferme : this.visage.ouvert;
+      if (this.visage.materiau.map !== tex) {
+        this.visage.materiau.map = tex;
+        this.visage.materiau.needsUpdate = true;
+      }
+    }
   }
 
   /**
