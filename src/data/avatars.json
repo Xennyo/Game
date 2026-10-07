@@ -16,7 +16,8 @@
     "manches": "longues",
     "motif": null,
     "pantalon": "#38466a",
-    "chaussures": "#f1f1f1"
+    "chaussures": "#f1f1f1",
+    "modele3d": null
   },
   "mj": {
     "taille": 1.05,
@@ -35,6 +36,7 @@
     "manches": "courtes",
     "motif": "#e7a9c9",
     "pantalon": "#3c4e6e",
-    "chaussures": "#ececec"
+    "chaussures": "#ececec",
+    "modele3d": null
   }
 }

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Modele, HANCHE, HAUTEUR_SIEGE, POSITION_MAINS, type Apparence } from './Modele';
+import { ModeleImporte, type DescriptionModele3d } from './ModeleImporte';
 
 export const RAYON_AVATAR = 0.4;
 const VITESSE_MARCHE_SCRIPT = 3.2;
@@ -24,6 +25,8 @@ export class Personnage {
   /** Le corps visible ; contient aussi les objets tenus en main */
   protected corps: THREE.Group;
   protected modele: Modele;
+  /** Le vrai modèle 3D, une fois chargé (sinon l'avatar construit dans le code sert de secours) */
+  private importe: ModeleImporte | null = null;
   protected temps = 0;
   private phase = 0;
   private amplitude = 0;
@@ -36,11 +39,21 @@ export class Personnage {
   private finMarche: (() => void) | null = null;
   private salut = 0;
 
-  constructor(apparence: Apparence) {
+  constructor(apparence: Apparence & { modele3d?: DescriptionModele3d | null }) {
     this.corps = new THREE.Group();
     this.modele = new Modele(apparence);
     this.corps.add(this.modele.racine);
     this.object.add(this.corps);
+    if (apparence.modele3d?.fichier) this.chargerModele3d(apparence.modele3d);
+  }
+
+  /** Remplace l'avatar de secours par le vrai modèle dès qu'il est chargé */
+  private async chargerModele3d(d: DescriptionModele3d) {
+    const m = await ModeleImporte.charger(d);
+    if (!m) return;
+    this.corps.remove(this.modele.racine);
+    this.corps.add(m.racine);
+    this.importe = m;
   }
 
   get marcheScriptee(): boolean {
@@ -135,19 +148,26 @@ export class Personnage {
     if (this.salut > 0) this.salut = Math.max(0, this.salut - dt);
 
     // En position assise, le bassin descend jusqu'à la hauteur du siège
-    const descente = HANCHE * this.modele.a.taille - HAUTEUR_SIEGE;
+    const descente = this.importe ? this.importe.descenteAssis : HANCHE * this.modele.a.taille - HAUTEUR_SIEGE;
     this.corps.position.y = -descente * this.assis + Math.abs(Math.sin(this.phase)) * 0.05 * this.amplitude;
 
     // Le bras se lève et se rabaisse en douceur au début et à la fin du salut
     const salut = Math.min(1, this.salut / 0.25, (DUREE_SALUT - this.salut) / 0.25);
     const tient = this.corps.children.some((o) => o.userData.tenu);
-    this.modele.animer({
+    const etat = {
       temps: this.temps,
       phase: this.phase,
       amplitude: this.amplitude,
       assis: this.assis,
       salut: Math.max(0, salut),
       tient,
-    });
+    };
+    if (this.importe) {
+      // Le vrai modèle a ses propres animations : pas de rebond ajouté
+      this.corps.position.y = -descente * this.assis;
+      this.importe.animer(dt, etat, vitesse);
+    } else {
+      this.modele.animer(etat);
+    }
   }
 }
