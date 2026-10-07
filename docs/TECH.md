@@ -27,10 +27,13 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     ├── game/
     │   ├── Game.ts      # boucle principale, gestion des états (titre, exploration, souvenir, fin)
     │   ├── World.ts     # chargement du monde et des zones
+    │   ├── Avatar.ts    # corps placeholder commun aux deux avatars
     │   ├── Player.ts    # avatar de la joueuse, déplacements, animations
     │   ├── GameMaster.ts# avatar du MJ (PNJ scripté) : déplacements automatiques, dialogues
     │   ├── Camera.ts    # caméra à la troisième personne
     │   ├── Input.ts     # clavier et joystick tactile
+    │   ├── Marker.ts    # halo lumineux au sol (là où elle doit aller)
+    │   ├── Script.ts    # lecteur de scripts : enchaîne dialogues, déplacements du MJ, actions de la joueuse
     │   └── Memory.ts    # zone de souvenir : déclenchement, scène, séquence (cinématique puis actions jouées), déblocage
     ├── ui/
     │   ├── Dialogue.ts  # bulle de dialogue du MJ
@@ -38,12 +41,28 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     │   └── Hud.ts       # compteur de souvenirs, indicateur de direction
     ├── data/
     │   ├── souvenirs.json  # contenu des souvenirs (généré depuis docs/SOUVENIRS.md)
-    │   └── dialogues.json  # répliques du MJ (intro, transitions, final)
+    │   └── dialogues.json  # noms affichés + script de l'intro (et plus tard transitions, final)
     └── utils/
         └── save.ts      # sauvegarde de la progression dans localStorage
 ```
 
 L'interface (dialogues, photos, textes) se fait en HTML et CSS par-dessus le canvas 3D : plus simple et plus lisible que du texte en 3D.
+
+### Scripts
+
+L'intro (et plus tard chaque souvenir) est un **script** : une liste d'étapes jouées dans l'ordre par `Script.ts`. Étapes disponibles :
+
+| Étape | Effet |
+|-------|-------|
+| `{ "type": "dialogue", "lignes": [{ "qui": "mj", "texte": "...", "texteTactile": "..." }] }` | bulle de dialogue, elle avance d'un clic. `texteTactile` (optionnel) remplace le texte sur téléphone |
+| `{ "type": "placerMj", "position": [x, 0, z] }` | pose le MJ quelque part, sans animation |
+| `{ "type": "mjMarche", "vers": [x, 0, z] }` ou `"vers": "joueuse"` | le MJ marche jusqu'au point, ou jusque devant elle |
+| `{ "type": "mjTeleporte", "vers": [x, 0, z] }` | le MJ disparaît et réapparaît ailleurs |
+| `{ "type": "mjSalue" }` | petit geste de salut |
+| `{ "type": "aller", "cible": [x, 0, z], "aide": "...", "aideTactile": "..." }` | un halo apparaît, le script attend qu'elle entre dedans |
+| `{ "type": "pause", "secondes": 1 }` | attente |
+
+Pendant un dialogue, l'avatar de la joueuse ne bouge pas et la caméra cadre les deux personnages. Une étape inconnue est ignorée (jamais de blocage).
 
 ### Format d'un souvenir dans `souvenirs.json`
 

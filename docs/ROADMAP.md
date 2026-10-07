@@ -26,10 +26,10 @@ Cocher les cases au fur et à mesure.
 
 ## Étape 2 : Le maître du jeu (PNJ)
 
-- [ ] Placeholder du MJ dans le monde : un PNJ automatique, personne ne le contrôle
-- [ ] Système de dialogue (bulle, avancer d'un tap ou d'un clic) alimenté par `dialogues.json`
-- [ ] Introduction jouée au lancement
-- [ ] Le MJ se déplace tout seul (script) ou se téléporte vers un point donné
+- [x] Placeholder du MJ dans le monde : un PNJ automatique, personne ne le contrôle
+- [x] Système de dialogue (bulle, avancer d'un tap ou d'un clic) alimenté par `dialogues.json`
+- [x] Introduction jouée au lancement
+- [x] Le MJ se déplace tout seul (script) ou se téléporte vers un point donné
 
 **Validation** : l'intro se joue, les dialogues sont lisibles sur téléphone.
 

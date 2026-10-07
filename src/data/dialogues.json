@@ -1,0 +1,48 @@
+{
+  "noms": {
+    "mj": "Olivier",
+    "joueuse": "Maëlle"
+  },
+  "intro": [
+    { "type": "placerMj", "position": [0, 0, -2] },
+    { "type": "pause", "secondes": 0.6 },
+    { "type": "mjMarche", "vers": "joueuse" },
+    { "type": "mjSalue" },
+    {
+      "type": "dialogue",
+      "lignes": [
+        { "qui": "mj", "texte": "Coucou Chouchou Beignet, bienvenue !" },
+        { "qui": "mj", "texte": "On va faire un petit jeu ensemble, mais avant, je vais t'expliquer comment te déplacer dans ce monde !" },
+        {
+          "qui": "mj",
+          "texte": "Pour marcher, utilise les touches Z, Q, S, D ou les flèches du clavier. Si tu gardes Maj enfoncée, tu cours !",
+          "texteTactile": "Pour marcher, pose ton pouce sur la moitié gauche de l'écran et fais-le glisser. Pousse plus loin pour courir !"
+        },
+        {
+          "qui": "mj",
+          "texte": "Et pour regarder autour de toi, clique et fais glisser la souris.",
+          "texteTactile": "Et pour regarder autour de toi, fais glisser ton doigt sur la moitié droite de l'écran."
+        },
+        { "qui": "mj", "texte": "Essaie : rejoins le cercle de lumière, juste là !" }
+      ]
+    },
+    {
+      "type": "aller",
+      "cible": [-6, 0, 1],
+      "aide": "ZQSD ou flèches pour marcher · Maj pour courir",
+      "aideTactile": "Pouce à gauche pour marcher · glisse à droite pour tourner"
+    },
+    { "type": "mjMarche", "vers": "joueuse" },
+    {
+      "type": "dialogue",
+      "lignes": [
+        { "qui": "mj", "texte": "Bravo, tu as tout compris !" },
+        { "qui": "mj", "texte": "Dans ce monde sont cachés nos souvenirs. Je vais te guider jusqu'à chacun d'eux, un par un." },
+        { "qui": "mj", "texte": "Quand tu vois un cercle de lumière, entre dedans pour revivre le moment." },
+        { "qui": "mj", "texte": "Pas de piège, pas de chrono : prends ton temps. Si tu te perds, je ne suis jamais loin." },
+        { "qui": "mj", "texte": "Allez, je t'attends au milieu de la place !" }
+      ]
+    },
+    { "type": "mjTeleporte", "vers": [0, 0, 0] }
+  ]
+}

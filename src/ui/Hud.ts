@@ -1,18 +1,23 @@
-import textes from '../data/textes.json';
+import { estTactile } from '../utils/appareil';
 
-/** Interface affichée par-dessus la 3D. Étape 1 : l'aide aux contrôles. */
+/** Interface affichée par-dessus la 3D. Pour l'instant : une aide aux contrôles. */
 export class Hud {
   private aide: HTMLDivElement;
 
   constructor() {
-    const tactile = window.matchMedia('(pointer: coarse)').matches;
     this.aide = document.createElement('div');
-    this.aide.className = 'aide';
-    this.aide.textContent = tactile ? textes.aideTactile : textes.aideOrdinateur;
+    this.aide.className = 'aide cachee';
     document.body.appendChild(this.aide);
   }
 
-  masqueAide() {
+  afficherAide(texte?: string, texteTactile?: string) {
+    const t = (estTactile && texteTactile) || texte;
+    if (!t) return;
+    this.aide.textContent = t;
+    this.aide.classList.remove('cachee');
+  }
+
+  masquerAide() {
     this.aide.classList.add('cachee');
   }
 }

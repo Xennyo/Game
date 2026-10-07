@@ -61,8 +61,53 @@ body {
   font-size: 15px;
   text-align: center;
   pointer-events: none;
-  transition: opacity 1s 1.5s;
+  transition: opacity 0.4s;
 }
 .aide.cachee {
   opacity: 0;
+}
+
+/* Bulle de dialogue du MJ */
+.dialogue {
+  position: fixed;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(680px, calc(100% - 24px));
+  box-sizing: border-box;
+  padding: 14px 18px 12px;
+  border-radius: 18px;
+  background: rgba(255, 250, 243, 0.96);
+  box-shadow: 0 6px 24px rgba(80, 50, 30, 0.25);
+  color: #3d2a20;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.dialogue.cachee {
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  pointer-events: none;
+}
+.dialogue-nom {
+  font-weight: 700;
+  font-size: 15px;
+  color: #3b78b5;
+  margin-bottom: 4px;
+}
+.dialogue[data-qui='joueuse'] .dialogue-nom {
+  color: #d0577f;
+}
+.dialogue-texte {
+  font-size: 18px;
+  line-height: 1.4;
+  min-height: 2.8em;
+}
+.dialogue-suite {
+  text-align: right;
+  font-size: 13px;
+  color: #9a7d6b;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.dialogue-suite.visible {
+  opacity: 1;
 }
