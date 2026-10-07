@@ -4,10 +4,10 @@
 
 | Champ | Valeur |
 |-------|--------|
-| Date de l'anniversaire | [À COMPLÉTER] |
-| Date limite de livraison (une semaine avant) | [À COMPLÉTER] |
-| Prénom de la joueuse | [À COMPLÉTER] |
-| Support principal | [À COMPLÉTER : téléphone (iPhone / Android) ou ordinateur] |
+| Date de l'anniversaire | 24 novembre 2026 |
+| Date limite de livraison (une semaine avant) | 17 novembre 2026 |
+| Prénom de la joueuse | Maëlle |
+| Support principal | Ordinateur (potentiellement modeste), téléphone possible en secours : on garde clavier et joystick tactile |
 | Durée de jeu visée | 15 à 30 minutes |
 | Nombre de souvenirs | 5 à 10 (voir `SOUVENIRS.md`) |
 

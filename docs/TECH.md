@@ -7,7 +7,7 @@
 | Moteur 3D | Three.js | Standard du web 3D, très documenté, tourne dans tous les navigateurs |
 | Outil de build | Vite | Démarrage instantané, rechargement automatique, build simple |
 | Langage | TypeScript | Moins d'erreurs, et Claude s'y retrouve mieux sur un projet qui grandit |
-| Joystick mobile | nipplejs (ou joystick maison) | Léger et éprouvé |
+| Joystick mobile | Joystick maison | Quelques lignes de code, aucune dépendance en plus |
 | Hébergement | Cloudflare Pages | Déjà utilisé par Olivier, gratuit, déploiement automatique depuis GitHub |
 
 Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des collisions par boîtes englobantes suffisent pour se promener. Ajouter Rapier seulement si c'est vraiment nécessaire.

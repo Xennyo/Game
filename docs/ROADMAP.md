@@ -9,10 +9,10 @@ Cocher les cases au fur et à mesure.
 
 ## Étape 0 : Mise en place
 
-- [ ] Projet Vite + TypeScript + Three.js initialisé
-- [ ] Structure de dossiers de `TECH.md` créée
-- [ ] `.gitignore`, scripts npm, `npm run dev -- --host` documenté pour tester sur téléphone
-- [ ] Une scène vide avec un sol, une lumière et un cube s'affiche
+- [x] Projet Vite + TypeScript + Three.js initialisé
+- [x] Structure de dossiers de `TECH.md` créée
+- [x] `.gitignore`, scripts npm, `npm run dev -- --host` documenté pour tester sur téléphone
+- [x] Une scène vide avec un sol, une lumière et un cube s'affiche
 
 **Validation** : Olivier voit le cube sur son ordinateur et sur son téléphone (même wifi).
 
