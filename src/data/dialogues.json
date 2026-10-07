@@ -43,6 +43,6 @@
         { "qui": "mj", "texte": "Allez, je t'attends au milieu de la place !" }
       ]
     },
-    { "type": "mjTeleporte", "vers": [0, 0, 0] }
+    { "type": "mjMarche", "vers": [0, 0, 0] }
   ]
 }
