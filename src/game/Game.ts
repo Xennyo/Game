@@ -1,15 +1,21 @@
 import * as THREE from 'three';
+import { Input } from './Input';
+import { Player } from './Player';
+import { ThirdPersonCamera } from './Camera';
+import { World } from './World';
+import { Hud } from '../ui/Hud';
 
-/**
- * Boucle principale du jeu.
- * Étape 0 : une scène simple avec un sol, une lumière et un cube.
- */
+/** Boucle principale du jeu */
 export class Game {
   private renderer: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
-  private camera: THREE.PerspectiveCamera;
   private clock = new THREE.Clock();
-  private cube: THREE.Mesh;
+  private input: Input;
+  private world = new World();
+  private player = new Player();
+  private cam: ThirdPersonCamera;
+  private hud = new Hud();
+  private sun: THREE.DirectionalLight;
 
   constructor(private container: HTMLElement) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -17,37 +23,26 @@ export class Game {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     container.appendChild(this.renderer.domElement);
+    this.input = new Input(this.renderer.domElement);
+    this.cam = new ThirdPersonCamera(this.world.limite + 1);
 
     this.scene.background = new THREE.Color('#f6c99b');
-    this.scene.fog = new THREE.Fog('#f6c99b', 30, 80);
-
-    this.camera = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
-    this.camera.position.set(6, 5, 8);
-    this.camera.lookAt(0, 0.5, 0);
+    this.scene.fog = new THREE.Fog('#f6c99b', 25, 60);
 
     // Lumière douce d'ambiance + soleil de fin de journée (seule source d'ombres)
     this.scene.add(new THREE.HemisphereLight('#fff1e0', '#8a6f5a', 1.2));
-    const sun = new THREE.DirectionalLight('#ffd2a1', 2);
-    sun.position.set(8, 12, 6);
-    sun.castShadow = true;
-    sun.shadow.mapSize.set(1024, 1024);
-    this.scene.add(sun);
+    this.sun = new THREE.DirectionalLight('#ffd2a1', 2);
+    this.sun.castShadow = true;
+    this.sun.shadow.mapSize.set(1024, 1024);
+    const s = this.sun.shadow.camera;
+    s.left = s.bottom = -15;
+    s.right = s.top = 15;
+    this.scene.add(this.sun, this.sun.target);
 
-    const ground = new THREE.Mesh(
-      new THREE.CircleGeometry(30, 48),
-      new THREE.MeshStandardMaterial({ color: '#9cc97a' }),
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    this.scene.add(ground);
-
-    this.cube = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshStandardMaterial({ color: '#e86f68', flatShading: true }),
-    );
-    this.cube.position.y = 0.5;
-    this.cube.castShadow = true;
-    this.scene.add(this.cube);
+    this.scene.add(this.world.object, this.player.object);
+    this.player.object.position.copy(this.world.spawn);
+    this.player.object.rotation.y = Math.PI; // regarde vers le centre
+    this.cam.snap(this.player.object.position);
 
     window.addEventListener('resize', () => this.resize());
     this.resize();
@@ -58,15 +53,33 @@ export class Game {
   }
 
   private update() {
-    const dt = this.clock.getDelta();
-    this.cube.rotation.y += dt * 0.8;
-    this.renderer.render(this.scene, this.camera);
+    // Plafonne le pas de temps : pas de saut géant après un changement d'onglet
+    const dt = Math.min(this.clock.getDelta(), 0.1);
+    const pos = this.player.object.position;
+
+    const move = this.input.getMove();
+    if (move.force > 0) this.hud.masqueAide();
+    this.player.update(dt, move, this.cam.yaw);
+    this.world.contraint(pos, this.player.rayon);
+
+    // Filet de sécurité : si l'avatar se retrouve dans un état anormal, il réapparaît
+    if (!Number.isFinite(pos.x) || !Number.isFinite(pos.z)) {
+      pos.copy(this.world.spawn);
+      this.cam.snap(pos);
+    }
+
+    this.cam.update(dt, pos, this.input.consumeYawDelta());
+
+    // Le soleil suit l'avatar pour garder des ombres nettes autour d'elle
+    this.sun.position.set(pos.x + 8, 12, pos.z + 6);
+    this.sun.target.position.copy(pos);
+
+    this.renderer.render(this.scene, this.cam.camera);
   }
 
   private resize() {
     const { clientWidth: w, clientHeight: h } = this.container;
     this.renderer.setSize(w, h);
-    this.camera.aspect = w / h;
-    this.camera.updateProjectionMatrix();
+    this.cam.setAspect(w / h);
   }
 }

@@ -18,9 +18,9 @@ Cocher les cases au fur et à mesure.
 
 ## Étape 1 : Se déplacer
 
-- [ ] Avatar placeholder (capsule) contrôlable au clavier et au joystick tactile
-- [ ] Caméra à la troisième personne qui suit l'avatar
-- [ ] Petit monde délimité (elle ne peut pas sortir de la carte)
+- [x] Avatar placeholder (capsule) contrôlable au clavier et au joystick tactile
+- [x] Caméra à la troisième personne qui suit l'avatar
+- [x] Petit monde délimité (elle ne peut pas sortir de la carte)
 
 **Validation** : se promener est agréable sur le support principal.
 

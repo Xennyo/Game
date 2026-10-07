@@ -60,8 +60,8 @@ Les éléments de décor viennent de packs d'assets low poly gratuits (voir `TEC
 
 ## Contrôles
 
-- **Téléphone** : joystick virtuel à gauche, la caméra suit automatiquement. Tap pour faire avancer les dialogues
-- **Ordinateur** : ZQSD ou flèches pour se déplacer, souris pour orienter la caméra (optionnel), Espace ou clic pour les dialogues
+- **Téléphone** : joystick virtuel qui apparaît sous le pouce sur la moitié gauche de l'écran (pousser à fond pour courir), glisser sur la moitié droite pour tourner la caméra. La caméra suit automatiquement. Tap pour faire avancer les dialogues
+- **Ordinateur** : ZQSD ou flèches pour se déplacer (WASD marche aussi sur un clavier QWERTY), Maj pour courir, glisser avec la souris pour tourner la caméra (optionnel), Espace ou clic pour les dialogues
 - Pas de saut, pas de combat, pas de mort : rien qui puisse la bloquer ou la frustrer
 
 ## Ambiance
