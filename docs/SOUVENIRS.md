@@ -24,6 +24,7 @@
   - Détail clé ou clin d'œil : aucun
 - **Cinématique d'ouverture** (ce que vos avatars rejouent tout seuls) : la caméra la voit travailler, je me retourne ensuite pour l'aider et discuter avec elle.
 - **Ce qu'elle joue** (2 à 4 actions simples) : Elle ne joue rien.
+- **Objet laissé dans le pré** (optionnel) : [ex : une tasse de café géante. Par défaut : la photo en polaroid sur un chevalet]
 - **Photo** : [nom du fichier, ou "aucune"]
 - **Texte affiché** : [le message pour elle]
 - **Réplique du MJ avant** : "Est ce que tu te souviens de notre première rencontre?"
@@ -43,6 +44,7 @@
   - Détail clé ou clin d'œil : 
 - **Cinématique d'ouverture** : On arrive en marchant avec des pizza dans les mains pour s'asseoir sur le banc.
 - **Ce qu'elle joue** : Elle doit marcher jusqu'au banc.
+- **Objet laissé dans le pré** :
 - **Photo** :
 - **Texte affiché** :
 - **Réplique du MJ avant** :
@@ -62,6 +64,7 @@
   - Détail clé ou clin d'œil :
 - **Cinématique d'ouverture** :
 - **Ce qu'elle joue** :
+- **Objet laissé dans le pré** :
 - **Photo** :
 - **Texte affiché** :
 - **Réplique du MJ avant** :

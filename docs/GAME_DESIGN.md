@@ -43,6 +43,8 @@ L'avatar d'Olivier est le maître du jeu. Il l'accueille, lui explique quoi fair
    - **elle joue la suite** : elle reprend le contrôle de son avatar dans le décor et fait 2 à 4 actions simples qui terminent le moment (rejoindre ta table, s'asseoir à côté de toi, toucher un objet, t'embrasser). Un marqueur indique toujours l'action suivante, impossible de se tromper
    - affichage de la photo et du texte du souvenir, puis réplique du MJ
    - retour à l'exploration, le souvenir est marqué comme débloqué
+   - **transition vers le suivant** : fondu, retour dans le pré. Le MJ dit sa réplique « après », puis va attendre près du souvenir suivant. Un halo marque l'endroit, une flèche au bord de l'écran montre la direction. Elle n'a que quelques secondes de marche : c'est une respiration, pas une quête
+   - **trace dans le pré** : chaque souvenir débloqué laisse un objet dans le monde (une polaroid sur un chevalet, ou un objet clin d'œil propre au souvenir). Le pré se remplit au fil de votre histoire
 5. **Progression** : les souvenirs se débloquent dans l'ordre chronologique (plus simple à guider et plus narratif). Un compteur affiche "souvenirs : 3 / 8"
 6. **Final** : une fois tous les souvenirs débloqués, le MJ l'emmène vers une dernière zone pour la surprise finale (message, déclaration, indice vers le vrai cadeau, à définir dans `SOUVENIRS.md`)
 7. **Écran de fin** : message de fin, possibilité de revoir la galerie des souvenirs
@@ -57,6 +59,12 @@ Chaque souvenir se **rejoue en direct**, ce n'est pas une image figée d'un lieu
 - la photo réelle est montrée à côté, comme un cadre ou une polaroid
 
 Les éléments de décor viennent de packs d'assets low poly gratuits (voir `TECH.md`), pour garder un style cohérent.
+
+## Dialogues
+
+- Toutes les répliques sont écrites par Olivier (fiches de `SOUVENIRS.md`), jamais générées. Claude peut proposer un brouillon à partir d'une idée, Olivier valide
+- Affichage dans une bulle en bas de l'écran, avec le nom de qui parle (Olivier ou Maëlle), pendant que les avatars bougent. Elle avance d'un clic ou d'un tap
+- Option : certaines répliques enregistrées avec la voix d'Olivier (mémo vocal, converti en fichier audio léger) jouées pendant les cinématiques
 
 ## Contrôles
 
