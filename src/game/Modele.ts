@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { construireTeteOlivier } from './avatars/Olivier';
 
 /** Apparence d'un avatar, décrite dans src/data/avatars.json */
 export interface Apparence {
@@ -35,6 +36,8 @@ export interface Apparence {
   chaussuresForme?: string;
   /** Couleur des perles d'un bracelet au poignet droit */
   bracelet?: string | null;
+  /** Tête faite sur mesure pour un personnage (ex. 'olivier' : src/game/avatars/Olivier.ts) */
+  tete?: string | null;
 }
 
 /** Ce que l'animation doit montrer à cet instant */
@@ -1042,6 +1045,10 @@ export class Modele {
     const a = this.a;
     const t = this.tete;
     t.position.y = 0.94;
+    if (a.tete === 'olivier') {
+      this.visage = construireTeteOlivier(t, this.cheveux, a);
+      return;
+    }
     piece(t, new THREE.SphereGeometry(RM, 36, 28), a.peau, [0, 0, 0], [1, 1.06, 0.98]);
     for (const cote of [1, -1]) {
       piece(t, new THREE.SphereGeometry(0.06, 14, 10), a.peau, [cote * RM * 0.98, -0.02, 0], [0.45, 0.9, 0.7]);
