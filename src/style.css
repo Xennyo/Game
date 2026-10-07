@@ -111,3 +111,127 @@ body {
 .dialogue-suite.visible {
   opacity: 1;
 }
+
+/* Compteur de souvenirs */
+.compteur {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 12px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 250, 243, 0.85);
+  color: #3d2a20;
+  font-size: 15px;
+  font-weight: 600;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.compteur.cachee {
+  opacity: 0;
+}
+
+/* Fondu au noir */
+.fondu {
+  position: fixed;
+  inset: 0;
+  background: #1a1210;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+.fondu.actif {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Carte souvenir : polaroid + texte */
+.carte-fond {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  background: rgba(40, 25, 20, 0.55);
+  overflow-y: auto;
+  transition: opacity 0.3s;
+}
+.carte-fond.cachee {
+  opacity: 0;
+  pointer-events: none;
+}
+.carte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  max-width: 820px;
+  margin: auto;
+  transform: translateY(0);
+  transition: transform 0.4s;
+}
+.carte-fond.cachee .carte {
+  transform: translateY(20px);
+}
+.polaroid {
+  background: #fbf8f2;
+  padding: 12px 12px 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transform: rotate(-2.5deg);
+  width: min(300px, 75vw);
+}
+.polaroid-photo {
+  aspect-ratio: 1;
+  background: #d9cfc2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.polaroid-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.polaroid-vide {
+  color: #9a8b7c;
+  font-style: italic;
+}
+.polaroid-legende {
+  font-family: 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive;
+  font-size: 20px;
+  color: #3d2a20;
+  text-align: center;
+  padding: 12px 4px 16px;
+}
+.carte-texte {
+  flex: 1 1 280px;
+  max-width: 420px;
+  color: #fff8ef;
+}
+.carte-date {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+.carte-message {
+  font-size: 19px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.carte-bouton {
+  flex-basis: 100%;
+  max-width: 260px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 999px;
+  background: #fff3b0;
+  color: #3d2a20;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+}

@@ -6,6 +6,37 @@ interface Obstacle {
   r: number;
 }
 
+/** Zone où l'avatar peut marcher : un disque, avec des obstacles ronds à contourner */
+export class Zone {
+  readonly obstacles: Obstacle[] = [];
+  constructor(
+    readonly centre: THREE.Vector3,
+    readonly limite: number,
+  ) {}
+
+  /** Corrige une position pour qu'elle reste dans la zone et hors des obstacles */
+  contraint(pos: THREE.Vector3, rayonAvatar: number) {
+    for (const o of this.obstacles) {
+      const dx = pos.x - o.x;
+      const dz = pos.z - o.z;
+      const d = Math.hypot(dx, dz);
+      const min = o.r + rayonAvatar;
+      if (d < min && d > 0.0001) {
+        pos.x = o.x + (dx / d) * min;
+        pos.z = o.z + (dz / d) * min;
+      }
+    }
+    const dx = pos.x - this.centre.x;
+    const dz = pos.z - this.centre.z;
+    const d = Math.hypot(dx, dz);
+    if (d > this.limite) {
+      pos.x = this.centre.x + (dx * this.limite) / d;
+      pos.z = this.centre.z + (dz * this.limite) / d;
+    }
+    pos.y = 0;
+  }
+}
+
 /**
  * Le petit monde : un grand pré rond bordé de buissons, quelques arbres et rochers.
  * Elle ne peut pas en sortir (limite circulaire) ni traverser les obstacles.
@@ -16,7 +47,7 @@ export class World {
   /** Distance maximale du centre où l'avatar peut aller */
   readonly limite = 26.5;
   readonly spawn = new THREE.Vector3(0, 0, 6);
-  private obstacles: Obstacle[] = [];
+  readonly zone = new Zone(new THREE.Vector3(), this.limite);
 
   constructor() {
     const sol = new THREE.Mesh(
@@ -76,7 +107,7 @@ export class World {
     feuillage.position.set(x, 2.9 * taille, z);
     feuillage.castShadow = true;
     this.object.add(tronc, feuillage);
-    this.obstacles.push({ x, z, r: 0.35 * taille });
+    this.zone.obstacles.push({ x, z, r: 0.35 * taille });
   }
 
   private ajouteRocher(x: number, z: number, taille: number) {
@@ -88,27 +119,56 @@ export class World {
     rocher.castShadow = true;
     rocher.receiveShadow = true;
     this.object.add(rocher);
-    this.obstacles.push({ x, z, r: taille * 0.9 });
+    this.zone.obstacles.push({ x, z, r: taille * 0.9 });
   }
 
-  /** Corrige une position pour qu'elle reste dans le monde et hors des obstacles */
-  contraint(pos: THREE.Vector3, rayonAvatar: number) {
-    for (const o of this.obstacles) {
-      const dx = pos.x - o.x;
-      const dz = pos.z - o.z;
-      const d = Math.hypot(dx, dz);
-      const min = o.r + rayonAvatar;
-      if (d < min && d > 0.0001) {
-        pos.x = o.x + (dx / d) * min;
-        pos.z = o.z + (dz / d) * min;
-      }
+  /**
+   * Trace laissée par un souvenir débloqué : une polaroid sur un chevalet,
+   * tournée vers le centre de la place.
+   */
+  ajouterTrace(pos: THREE.Vector3, photo?: string) {
+    const chevalet = new THREE.Group();
+    const bois = new THREE.MeshStandardMaterial({ color: '#8a5a3b', flatShading: true });
+    for (const x of [-0.35, 0.35]) {
+      const pied = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.6, 0.07), bois);
+      pied.position.set(x, 0.8, 0);
+      pied.rotation.x = -0.12;
+      pied.castShadow = true;
+      chevalet.add(pied);
     }
-    const d = Math.hypot(pos.x, pos.z);
-    if (d > this.limite) {
-      pos.x *= this.limite / d;
-      pos.z *= this.limite / d;
+    const arriere = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.6, 0.07), bois);
+    arriere.position.set(0, 0.75, -0.35);
+    arriere.rotation.x = 0.3;
+    chevalet.add(arriere);
+
+    // Le cadre blanc de la polaroid, puis la photo par-dessus
+    const cadre = new THREE.Mesh(
+      new THREE.BoxGeometry(0.9, 1.05, 0.04),
+      new THREE.MeshStandardMaterial({ color: '#fbf8f2' }),
+    );
+    cadre.position.set(0, 1.35, 0.1);
+    cadre.rotation.x = -0.12;
+    cadre.castShadow = true;
+    chevalet.add(cadre);
+
+    const image = new THREE.MeshBasicMaterial({ color: '#d9cfc2' });
+    if (photo) {
+      new THREE.TextureLoader().load(photo, (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        image.map = texture;
+        image.color.set('#ffffff');
+        image.needsUpdate = true;
+      });
     }
-    pos.y = 0;
+    const photoMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 0.78), image);
+    photoMesh.position.set(0, 0.07, 0.021);
+    cadre.add(photoMesh);
+
+    chevalet.position.set(pos.x, 0, pos.z);
+    chevalet.rotation.y = Math.atan2(-pos.x, -pos.z);
+    if (pos.lengthSq() < 1) chevalet.rotation.y = 0;
+    this.object.add(chevalet);
+    this.zone.obstacles.push({ x: pos.x, z: pos.z, r: 0.45 });
   }
 }
 

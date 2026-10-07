@@ -34,8 +34,11 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     │   ├── Input.ts     # clavier et joystick tactile
     │   ├── Marker.ts    # halo lumineux au sol (là où elle doit aller)
     │   ├── Script.ts    # lecteur de scripts : enchaîne dialogues, déplacements du MJ, actions de la joueuse
-    │   └── Memory.ts    # zone de souvenir : déclenchement, scène, séquence (cinématique puis actions jouées), déblocage
+    │   ├── Memory.ts    # format d'un souvenir et construction de sa scène 3D
+    │   ├── Formes.ts    # formes simples de décor décrites dans les données
+    │   └── Guide.ts     # flèche au sol vers le prochain objectif
     ├── ui/
+    │   ├── Fondu.ts     # fondu au noir
     │   ├── Dialogue.ts  # bulle de dialogue du MJ
     │   ├── MemoryCard.ts# affichage photo et texte
     │   └── Hud.ts       # compteur de souvenirs, indicateur de direction
@@ -50,47 +53,57 @@ L'interface (dialogues, photos, textes) se fait en HTML et CSS par-dessus le can
 
 ### Scripts
 
-L'intro (et plus tard chaque souvenir) est un **script** : une liste d'étapes jouées dans l'ordre par `Script.ts`. Étapes disponibles :
+L'intro et chaque souvenir sont des **scripts** : des listes d'étapes jouées dans l'ordre par `Script.ts`. `qui` vaut `"mj"` (Olivier) ou `"joueuse"` (Maëlle). Les angles sont en degrés (180 = tourné vers le fond, -z). Dans un souvenir, les positions sont relatives au centre de la scène.
 
 | Étape | Effet |
 |-------|-------|
 | `{ "type": "dialogue", "lignes": [{ "qui": "mj", "texte": "...", "texteTactile": "..." }] }` | bulle de dialogue, elle avance d'un clic. `texteTactile` (optionnel) remplace le texte sur téléphone |
-| `{ "type": "placerMj", "position": [x, 0, z] }` | pose le MJ quelque part, sans animation |
-| `{ "type": "mjMarche", "vers": [x, 0, z] }` ou `"vers": "joueuse"` | le MJ marche jusqu'au point, ou jusque devant elle |
-| `{ "type": "mjTeleporte", "vers": [x, 0, z] }` | le MJ disparaît et réapparaît ailleurs |
-| `{ "type": "mjSalue" }` | petit geste de salut |
-| `{ "type": "aller", "cible": [x, 0, z], "aide": "...", "aideTactile": "..." }` | un halo apparaît, le script attend qu'elle entre dedans |
+| `{ "type": "placer", "qui": "mj", "position": [x, 0, z], "angle": 180 }` | pose un avatar quelque part, sans animation |
+| `{ "type": "marcher", "qui": "mj", "vers": [x, 0, z], "attendre": false }` | marche jusqu'au point (`"vers": "joueuse"` : jusque devant elle). Avec `"attendre": false`, l'étape suivante démarre tout de suite (les deux marchent en même temps) |
+| `{ "type": "pose", "qui": "joueuse", "pose": "assis", "angle": 180 }` | `assis` ou `debout` |
+| `{ "type": "regarder", "qui": "mj", "vers": "joueuse" }` | tourne la tête vers l'autre avatar, un point `[x, y, z]`, ou `null` |
+| `{ "type": "tenir", "qui": "mj", "objet": { forme } }` | lui met un objet dans les mains (une boîte à pizza...) |
+| `{ "type": "saluer", "qui": "mj" }` | petit geste de salut |
+| `{ "type": "teleporter", "vers": [x, 0, z] }` | le MJ disparaît et réapparaît ailleurs |
+| `{ "type": "aller", "cible": [x, 0, z], "aide": "...", "aideTactile": "..." }` | elle reprend le contrôle : un halo apparaît, le script attend qu'elle entre dedans |
+| `{ "type": "camera", "position": [x, y, z], "regard": [x, y, z], "instantane": true }` | plan de caméra fixe (glisse en douceur, sauf `instantane`) |
+| `{ "type": "cameraSuit" }` | la caméra suit de nouveau l'avatar |
 | `{ "type": "pause", "secondes": 1 }` | attente |
 
-Pendant un dialogue, l'avatar de la joueuse ne bouge pas et la caméra cadre les deux personnages. Une étape inconnue est ignorée (jamais de blocage).
+En dehors des étapes `aller`, elle ne contrôle pas son avatar et la caméra cadre les deux personnages. Une étape inconnue est ignorée (jamais de blocage).
 
 ### Format d'un souvenir dans `souvenirs.json`
 
 ```json
 {
-  "id": "01-premier-rdv",
-  "titre": "Notre premier rendez-vous",
-  "date": "Juin 2023",
-  "position": [12, 0, -8],
-  "scene": "scenes/01-premier-rdv.glb",
-  "ambiance": { "ciel": "#f6a96b", "lumiere": "soir" },
-  "posesAvatars": { "joueuse": "assise", "mj": "assis" },
-  "photo": "photos/01-premier-rdv.webp",
+  "id": "01-rencontre",
+  "titre": "Notre rencontre",
+  "date": "Septembre 2022",
+  "position": [0, 0, -5],
+  "attenteMj": [2, 0, -4],
+  "photo": "photos/01-rencontre.webp",
   "texte": "...",
-  "sequence": [
-    { "type": "cinematique", "actions": [
-      { "qui": "mj", "allerA": [2, 0, 1] },
-      { "qui": "joueuse", "allerA": [3, 0, 1] },
-      { "qui": "mj", "dit": "Te voilà enfin !" }
-    ] },
-    { "type": "aller", "cible": [2, 0, 0], "aide": "Rejoins-moi à la table" },
-    { "type": "interagir", "objet": "tasse", "aide": "Touche la tasse" },
-    { "type": "pose", "joueuse": "assise", "mj": "assis" }
-  ],
-  "mjAvant": ["Tu te souviens de cet endroit ?"],
-  "mjApres": ["J'étais tellement stressé ce jour-là..."]
+  "mjAvant": ["Est ce que tu te souviens de notre première rencontre?"],
+  "mjApres": ["Si j'avais su où ça nous mènerait"],
+  "scene": {
+    "rayon": 6,
+    "ambiance": { "ciel": "#cfe6f7", "lumiere": "jour", "sol": "#d9cbb5" },
+    "decor": [
+      { "nom": "tableau", "forme": "boite", "position": [0, 2.2, -6], "taille": [5, 1.6, 0.08], "couleur": "#2f4a3a" }
+    ]
+  },
+  "sequence": [ "... étapes de script ..." ]
 }
 ```
+
+- `position` : où se trouve le halo du souvenir dans le pré. `attenteMj` (optionnel) : où le MJ l'attend
+- `lumiere` : `jour`, `soir`, `couvert` ou `nuit`
+- `decor` : formes simples (`boite` [largeur, hauteur, profondeur], `cylindre` et `cone` [rayon, hauteur], `sphere` [rayon]), avec `rotation` en degrés. Elles seront remplacées par des modèles des packs low poly à l'étape 6
+- Déroulé : elle entre dans le halo, répliques `mjAvant`, fondu, la `sequence` se joue dans la scène, carte souvenir (photo + texte), fondu, retour au pré où une polaroid sur chevalet reste en souvenir, répliques `mjApres`, puis le MJ part attendre près du souvenir suivant
+
+### Sauvegarde
+
+La progression (intro vue, nombre de souvenirs débloqués) est gardée dans le `localStorage` du navigateur. Pour recommencer depuis le début : ajouter `?recommencer` à l'adresse (par exemple http://localhost:5173/?recommencer).
 
 ## Pipeline des modèles 3D
 
