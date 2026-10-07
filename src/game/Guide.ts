@@ -24,8 +24,10 @@ export class Guide {
       new THREE.ShapeGeometry(forme),
       new THREE.MeshBasicMaterial({ color: '#fff3b0', transparent: true, opacity: 0.9, side: THREE.DoubleSide }),
     );
-    this.fleche.rotation.x = -Math.PI / 2;
-    this.fleche.position.set(0, 0.05, 1.3);
+    // +90° : la pointe (vers +y dans le dessin) regarde vers +z, côté objectif
+    this.fleche.rotation.x = Math.PI / 2;
+    this.fleche.position.set(0, 0.05, 1.6);
+    this.fleche.scale.setScalar(1.6);
     this.object.add(this.fleche);
     this.object.visible = false;
   }
@@ -42,6 +44,6 @@ export class Guide {
     if (!this.object.visible || !c) return;
     this.object.position.set(joueuse.x, 0, joueuse.z);
     this.object.rotation.y = Math.atan2(c.x - joueuse.x, c.z - joueuse.z);
-    this.fleche.position.z = 1.3 + Math.sin(this.temps * 4) * 0.12;
+    this.fleche.position.z = 1.6 + Math.sin(this.temps * 4) * 0.12;
   }
 }
