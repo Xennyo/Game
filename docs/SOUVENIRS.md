@@ -22,6 +22,8 @@
   - Moment de la journée et météo : [ex : soir d'été, ciel orangé]
   - Pose des avatars : [ex : assis face à face]
   - Détail clé ou clin d'œil : [ex : les deux cafés renversés]
+- **Cinématique d'ouverture** (ce que vos avatars rejouent tout seuls) : [ex : je l'attends à la terrasse, elle arrive, je me lève et lui fais la bise. Avec les répliques si tu veux]
+- **Ce qu'elle joue** (2 à 4 actions simples) : [ex : 1. me rejoindre à la table, 2. s'asseoir, 3. toucher la tasse de café qui se renverse]
 - **Photo** : [nom du fichier, ou "aucune"]
 - **Texte affiché** : [le message pour elle]
 - **Réplique du MJ avant** : [ex : "Tu te souviens de cet endroit ?"]
@@ -39,6 +41,8 @@
   - Moment de la journée et météo :
   - Pose des avatars :
   - Détail clé ou clin d'œil :
+- **Cinématique d'ouverture** :
+- **Ce qu'elle joue** :
 - **Photo** :
 - **Texte affiché** :
 - **Réplique du MJ avant** :
@@ -56,6 +60,8 @@
   - Moment de la journée et météo :
   - Pose des avatars :
   - Détail clé ou clin d'œil :
+- **Cinématique d'ouverture** :
+- **Ce qu'elle joue** :
 - **Photo** :
 - **Texte affiché** :
 - **Réplique du MJ avant** :

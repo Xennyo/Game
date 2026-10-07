@@ -37,7 +37,7 @@ Cocher les cases au fur et à mesure.
 
 - [ ] Chargement de `souvenirs.json` (avec 2 souvenirs de test)
 - [ ] Zones de souvenirs avec marqueur visible
-- [ ] Déclenchement : fondu, affichage de la carte souvenir (photo + texte), répliques du MJ
+- [ ] Déclenchement : fondu, séquence jouée (cinématique des avatars, puis 2 à 4 actions simples de la joueuse), carte souvenir (photo + texte), répliques du MJ
 - [ ] Déblocage dans l'ordre, compteur, indicateur vers le prochain souvenir
 - [ ] Sauvegarde de la progression dans `localStorage`
 
@@ -64,6 +64,7 @@ Cocher les cases au fur et à mesure.
 - [ ] Décors low poly pour chaque souvenir, à partir des packs d'assets
 - [ ] Ambiance propre à chaque scène (ciel, lumière, éventuellement météo)
 - [ ] Détails clés et clins d'œil de chaque fiche
+- [ ] Cinématiques et actions de chaque souvenir peaufinées (déplacements, poses, objets interactifs)
 
 **Validation** : chaque souvenir est reconnaissable. Olivier valide scène par scène.
 

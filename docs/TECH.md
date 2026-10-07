@@ -31,7 +31,7 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     │   ├── GameMaster.ts# avatar du MJ, déplacements, dialogues
     │   ├── Camera.ts    # caméra à la troisième personne
     │   ├── Input.ts     # clavier et joystick tactile
-    │   └── Memory.ts    # zone de souvenir : déclenchement, scène, déblocage
+    │   └── Memory.ts    # zone de souvenir : déclenchement, scène, séquence (cinématique puis actions jouées), déblocage
     ├── ui/
     │   ├── Dialogue.ts  # bulle de dialogue du MJ
     │   ├── MemoryCard.ts# affichage photo et texte
@@ -58,6 +58,16 @@ L'interface (dialogues, photos, textes) se fait en HTML et CSS par-dessus le can
   "posesAvatars": { "joueuse": "assise", "mj": "assis" },
   "photo": "photos/01-premier-rdv.webp",
   "texte": "...",
+  "sequence": [
+    { "type": "cinematique", "actions": [
+      { "qui": "mj", "allerA": [2, 0, 1] },
+      { "qui": "joueuse", "allerA": [3, 0, 1] },
+      { "qui": "mj", "dit": "Te voilà enfin !" }
+    ] },
+    { "type": "aller", "cible": [2, 0, 0], "aide": "Rejoins-moi à la table" },
+    { "type": "interagir", "objet": "tasse", "aide": "Touche la tasse" },
+    { "type": "pose", "joueuse": "assise", "mj": "assis" }
+  ],
   "mjAvant": ["Tu te souviens de cet endroit ?"],
   "mjApres": ["J'étais tellement stressé ce jour-là..."]
 }

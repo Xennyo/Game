@@ -38,10 +38,10 @@ L'avatar d'Olivier est le maître du jeu. Il l'accueille, lui explique quoi fair
 2. **Introduction** : elle apparaît dans le monde, le MJ vient la saluer et explique le principe et les contrôles
 3. **Exploration** : elle se déplace vers les zones de souvenirs, signalées par un marqueur visible (lumière, halo, particules). Le MJ indique toujours le prochain objectif, et une petite flèche ou un indicateur l'aide à s'orienter
 4. **Déblocage d'un souvenir** : en entrant dans la zone
-   - courte transition (fondu)
-   - la scène 3D recréée apparaît, avec les deux avatars placés dans la scène
-   - affichage de la photo et du texte du souvenir
-   - réplique du MJ
+   - courte transition (fondu) et réplique du MJ
+   - **cinématique d'ouverture** : la scène 3D recréée apparaît et vos deux avatars rejouent le début du moment (ils marchent, se retrouvent, dialoguent). Elle avance d'un clic
+   - **elle joue la suite** : elle reprend le contrôle de son avatar dans le décor et fait 2 à 4 actions simples qui terminent le moment (rejoindre ta table, s'asseoir à côté de toi, toucher un objet, t'embrasser). Un marqueur indique toujours l'action suivante, impossible de se tromper
+   - affichage de la photo et du texte du souvenir, puis réplique du MJ
    - retour à l'exploration, le souvenir est marqué comme débloqué
 5. **Progression** : les souvenirs se débloquent dans l'ordre chronologique (plus simple à guider et plus narratif). Un compteur affiche "souvenirs : 3 / 8"
 6. **Final** : une fois tous les souvenirs débloqués, le MJ l'emmène vers une dernière zone pour la surprise finale (message, déclaration, indice vers le vrai cadeau, à définir dans `SOUVENIRS.md`)
@@ -49,9 +49,10 @@ L'avatar d'Olivier est le maître du jeu. Il l'accueille, lui explique quoi fair
 
 ## Recréation des scènes
 
-Chaque souvenir est un mini-décor 3D qui évoque le moment, sans chercher le réalisme :
+Chaque souvenir se **rejoue en direct**, ce n'est pas une image figée d'un lieu. C'est un mini-décor 3D qui évoque le moment, sans chercher le réalisme :
 - quelques éléments clés suffisent (un banc et un lampadaire, une table de restaurant, une plage avec un parasol)
-- les deux avatars sont placés dans la scène, dans une pose qui rappelle le moment
+- le souvenir est une suite de petites étapes décrites dans les données : cinématique (les avatars bougent et parlent tout seuls), puis actions jouées par elle (aller à un point, interagir avec un objet ou avec le MJ)
+- les actions restent très simples : pas d'échec possible, pas de timing, pas de mini-jeu
 - une ambiance propre au souvenir : couleur du ciel, heure du jour, météo
 - la photo réelle est montrée à côté, comme un cadre ou une polaroid
 
