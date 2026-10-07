@@ -1,10 +1,8 @@
 import * as THREE from 'three';
-import { Modele, HANCHE, POSITION_MAINS, type Apparence } from './Modele';
+import { Modele, HANCHE, HAUTEUR_SIEGE, POSITION_MAINS, type Apparence } from './Modele';
 
 export const RAYON_AVATAR = 0.4;
 const VITESSE_MARCHE_SCRIPT = 3.2;
-/** Hauteur du dessus d'un siège (bancs, gradins) */
-const HAUTEUR_SIEGE = 0.47;
 const DUREE_SALUT = 1.4;
 
 export type Pose = 'debout' | 'assis';

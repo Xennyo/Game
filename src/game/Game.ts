@@ -74,6 +74,8 @@ export class Game {
     this.sun = new THREE.DirectionalLight('#ffd2a1', 2);
     this.sun.castShadow = true;
     this.sun.shadow.mapSize.set(1024, 1024);
+    // Évite les petites taches d'ombre sur les vêtements des personnages
+    this.sun.shadow.normalBias = 0.03;
     const s = this.sun.shadow.camera;
     s.left = s.bottom = -15;
     s.right = s.top = 15;

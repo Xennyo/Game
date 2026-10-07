@@ -850,226 +850,194 @@
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -3.5,
-            0.4,
+            0.0,
             -1.4
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -0.5,
-            0.4,
+            0.0,
             -1.4
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -4.2,
-            0.8,
-            -0.0
+            0.4,
+            -1.1102230246251565e-16
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -2.0,
-            0.8,
-            -0.0
+            0.4,
+            -1.1102230246251565e-16
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -3.0,
-            1.2,
+            0.8,
             1.4
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -1.2,
-            1.2,
+            0.8,
             1.4
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -4.5,
-            1.6,
-            2.8
+            1.2000000000000002,
+            2.7999999999999994
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             0.2,
-            1.6,
-            2.8
+            1.2000000000000002,
+            2.7999999999999994
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -2.4,
-            1.6,
-            2.8
+            1.2000000000000002,
+            2.7999999999999994
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -3.6,
-            2.0,
-            4.2
+            1.6,
+            4.199999999999999
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             -0.8,
-            2.0,
-            4.2
+            1.6,
+            4.199999999999999
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             4.4,
-            0.4,
+            0.0,
             -1.4
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             4.8,
-            1.2,
+            0.8,
             1.4
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             3.9,
-            1.6,
-            2.8
+            1.2000000000000002,
+            2.7999999999999994
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             5.0,
-            2.0,
-            4.2
+            1.6,
+            4.199999999999999
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         },
         {
           "nom": "étudiant (figurant)",
-          "forme": "capsule",
+          "forme": "figurant",
+          "pose": "assis",
           "position": [
             4.6,
-            0.8,
-            -0.0
+            0.4,
+            -1.1102230246251565e-16
           ],
-          "taille": [
-            0.32,
-            1.05
-          ],
+          "rotation": 180,
           "couleur": "#9a9a9a"
         }
       ]

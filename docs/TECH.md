@@ -99,7 +99,7 @@ En dehors des étapes `aller`, elle ne contrôle pas son avatar et la caméra ca
 
 - `position` : où se trouve le halo du souvenir dans le pré. `attenteMj` (optionnel) : où le MJ l'attend
 - `lumiere` : `jour`, `soir`, `couvert` ou `nuit`
-- `decor` : formes simples (`boite` [largeur, hauteur, profondeur], `cylindre` et `cone` [rayon, hauteur], `sphere` [rayon]), avec `rotation` en degrés. Elles seront remplacées par des modèles des packs low poly à l'étape 6
+- `decor` : formes simples (`boite` [largeur, hauteur, profondeur], `cylindre` et `cone` [rayon, hauteur], `sphere` [rayon], `capsule` [rayon, hauteur]), avec `rotation` en degrés. La forme `figurant` ajoute un petit personnage d'une seule couleur, sans visage (`pose` : `assis` ou `debout`, `position` = le sol sous ses pieds) : il est figé et fusionné en un seul objet, donc léger. Elles seront remplacées par des modèles des packs low poly à l'étape 6
 - Déroulé : elle entre dans le halo, répliques `mjAvant`, fondu, la `sequence` se joue dans la scène, carte souvenir (photo + texte), fondu, retour au pré où une polaroid sur chevalet reste en souvenir, répliques `mjApres`, puis le MJ part attendre près du souvenir suivant
 
 ### Sauvegarde
@@ -112,9 +112,11 @@ La progression (intro vue, nombre de souvenirs débloqués) est gardée dans le 
 
 Décision d'octobre 2026 : les avatars sont **construits directement dans le code** (`src/game/Modele.ts`) à partir de formes simples, dans un style low poly « figurine », d'après les photos fournies par Olivier. Pas besoin d'outil d'IA, de Mixamo ni de Blender, et rien à télécharger : c'est léger, fiable et modifiable à tout moment.
 
-- **Apparence** dans `src/data/avatars.json` : taille, couleurs (peau, yeux, cheveux et reflets, haut, pull intérieur, pantalon, chaussures), coiffure (`longue-ondulee` ou `courte-bouclee`), barbe, taches de rousseur, joues, manches (`longues` ou `courtes`), motif sur le t-shirt. Changer une couleur ne demande pas de toucher au code
+- **Apparence** dans `src/data/avatars.json` : taille, couleurs (peau, yeux, lèvres, cheveux et reflets, haut, pull intérieur, pantalon, chaussures), coiffure (`longue-ondulee` : une cinquantaine de mèches ondulées ; `courte-bouclee` : boucles), barbe, cils, taches de rousseur, joues, manches (`longues` ou `courtes`), motif sur le t-shirt. Changer une couleur ne demande pas de toucher au code
+- **Visage** : tête en forme d'œuf, yeux avec iris, pupille, reflets et paupière, sourcils, nez, sourire. Les zones de cheveux et de barbe épousent la forme de la tête
+- **Légèreté** : dans chaque articulation, les morceaux de même couleur sont fusionnés (environ 25 000 triangles par avatar)
 - **Squelette simple** : hanches, genoux, épaules, coudes et tête, animés par le code
-- **Animations** : immobile (respiration), marche et course (selon la vitesse), position assise (le bassin descend à 0,47 m, hauteur des bancs et des gradins), salut de la main (1,4 s), objet tenu à deux mains
+- **Animations** : immobile (respiration, clignement des yeux), marche et course (selon la vitesse, avec les cheveux qui suivent), position assise (le bassin descend à 0,47 m, hauteur des bancs et des gradins), salut de la main (1,4 s), objet tenu à deux mains
 
 Option pour plus tard : si un vrai modèle `.glb` est fait un jour (Meshy ou Tripo pour le modèle, Mixamo pour les animations, puis compression avec `gltf-transform`), il pourra remplacer le corps dans `Personnage` sans changer les scripts.
 
