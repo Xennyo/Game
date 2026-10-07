@@ -140,7 +140,12 @@ Ce que ton avatar dit au tout début du jeu (accueil, explication du principe) :
 
 - Coucou Chouchou Beignet, bienvenue ! 
 - On va faire un petit jeu ensemble, mais avant, je vais t'expliquer comment te déplacer dans ce monde ! 
-- (Expliquer le déplacement et les règles du jeu, la faire tester les déplacements avant d'amener le dialogue suivant.
+- *Propositions de Claude, à valider ou réécrire (elles sont dans `src/data/dialogues.json`) :*
+- Explication des contrôles (version ordinateur) : "Pour marcher, utilise les touches Z, Q, S, D ou les flèches du clavier. Si tu gardes Maj enfoncée, tu cours !" puis "Et pour regarder autour de toi, clique et fais glisser la souris."
+- Version téléphone : "Pour marcher, pose ton pouce sur la moitié gauche de l'écran et fais-le glisser. Pousse plus loin pour courir !" puis "Et pour regarder autour de toi, fais glisser ton doigt sur la moitié droite de l'écran."
+- "Essaie : rejoins le cercle de lumière, juste là !" (elle doit marcher jusqu'à un halo pour continuer)
+- Après l'essai : "Bravo, tu as tout compris !"
+- Règles : "Dans ce monde sont cachés nos souvenirs. Je vais te guider jusqu'à chacun d'eux, un par un." / "Quand tu vois un cercle de lumière, entre dedans pour revivre le moment." / "Pas de piège, pas de chrono : prends ton temps. Si tu te perds, je ne suis jamais loin." / "Allez, je t'attends au milieu de la place !"
 
 ## Surprise finale
 

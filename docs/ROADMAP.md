@@ -26,21 +26,21 @@ Cocher les cases au fur et à mesure.
 
 ## Étape 2 : Le maître du jeu (PNJ)
 
-- [ ] Placeholder du MJ dans le monde : un PNJ automatique, personne ne le contrôle
-- [ ] Système de dialogue (bulle, avancer d'un tap ou d'un clic) alimenté par `dialogues.json`
-- [ ] Introduction jouée au lancement
-- [ ] Le MJ se déplace tout seul (script) ou se téléporte vers un point donné
+- [x] Placeholder du MJ dans le monde : un PNJ automatique, personne ne le contrôle
+- [x] Système de dialogue (bulle, avancer d'un tap ou d'un clic) alimenté par `dialogues.json`
+- [x] Introduction jouée au lancement
+- [x] Le MJ se déplace tout seul (script) ou se téléporte vers un point donné
 
 **Validation** : l'intro se joue, les dialogues sont lisibles sur téléphone.
 
 ## Étape 3 : Le système de souvenirs
 
-- [ ] Chargement de `souvenirs.json` (avec 2 souvenirs de test)
-- [ ] Zones de souvenirs avec marqueur visible
-- [ ] Déclenchement : fondu, séquence jouée (cinématique des avatars, puis 2 à 4 actions simples de la joueuse), carte souvenir (photo + texte), répliques du MJ
-- [ ] Déblocage dans l'ordre, compteur, indicateur vers le prochain souvenir
-- [ ] Retour au pré après chaque souvenir, le MJ va attendre près du suivant, trace laissée dans le pré (polaroid sur chevalet)
-- [ ] Sauvegarde de la progression dans `localStorage`
+- [x] Chargement de `souvenirs.json` (avec les 2 premières fiches d'Olivier)
+- [x] Zones de souvenirs avec marqueur visible
+- [x] Déclenchement : fondu, séquence jouée (cinématique des avatars, puis 2 à 4 actions simples de la joueuse), carte souvenir (photo + texte), répliques du MJ
+- [x] Déblocage dans l'ordre, compteur, indicateur vers le prochain souvenir
+- [x] Retour au pré après chaque souvenir, le MJ va attendre près du suivant, trace laissée dans le pré (polaroid sur chevalet)
+- [x] Sauvegarde de la progression dans `localStorage`
 
 **Validation** : on peut enchaîner les 2 souvenirs de test sans bug.
 
@@ -54,9 +54,9 @@ Cocher les cases au fur et à mesure.
 
 ## Étape 5 : Les vrais avatars
 
-- [ ] Intégration du modèle de la joueuse avec ses animations (immobile, marche, course)
-- [ ] Intégration du modèle du MJ avec ses animations et son geste de salut
-- [ ] Poses des avatars dans les scènes de souvenirs
+- [x] Avatar de la joueuse d'après sa photo, construit dans le code, avec ses animations (immobile, marche, course)
+- [x] Avatar du MJ d'après sa photo, mêmes animations plus le salut de la main
+- [x] Poses des avatars dans les scènes de souvenirs (assis, objet tenu à deux mains)
 
 **Validation** : les avatars sont reconnaissables et bien animés.
 

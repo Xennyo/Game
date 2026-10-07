@@ -20,11 +20,11 @@ L'avatar d'Olivier est le maître du jeu, sous forme de **PNJ** (personnage non 
 ## Personnages
 
 ### La joueuse (son avatar)
-- Modèle 3D low poly à son image, animé : immobile, marche, course (éventuellement une animation de joie)
+- Figurine 3D style pâte à modeler, d'après l'image de référence d'Olivier (longs cheveux ondulés couleur miel avec la raie au milieu, yeux bleus, grand sourire, t-shirt beige, pantalon large blanc à fleurs vertes, ballerines), animée : immobile, marche, course
 - Contrôlée par elle, en vue à la troisième personne
 
 ### Le maître du jeu (avatar d'Olivier)
-- Modèle 3D low poly à son image, mêmes animations de base, plus un geste (salut ou signe de la main)
+- Figurine 3D du même style (grosses mèches noires sur le front, yeux bruns, barbe et moustache noires, t-shirt noir avec un logo rose trèfle et bol de nouilles, pantalon gris clair ample, bracelet de perles), mêmes animations de base, plus un signe de la main
 - **Personnage non jouable (PNJ), entièrement automatique** : personne ne le contrôle pendant la partie. Ses déplacements, ses gestes et ses répliques sont écrits à l'avance dans les données du jeu. Maëlle joue seule
 - Il :
   - l'accueille au début et explique les contrôles

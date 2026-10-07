@@ -30,6 +30,10 @@ Ouvre l'adresse affichée après `Local:` (en général http://localhost:5173) d
 2. Lance `npm run dev`, puis ouvre sur le téléphone l'adresse affichée après `Network:` (du genre http://192.168.1.12:5173).
 3. Si la page ne s'ouvre pas, ton pare-feu bloque peut-être la connexion : sur Windows, accepte la fenêtre "Autoriser l'accès" qui apparaît au premier lancement.
 
+## Recommencer une partie
+
+La progression est sauvegardée dans le navigateur. Pour tout reprendre depuis l'intro, ajoute `?recommencer` à l'adresse : http://localhost:5173/?recommencer
+
 ## Récupérer une nouvelle version
 
 Dans GitHub Desktop : choisis la branche (menu *Current branch*), puis *Fetch origin* / *Pull origin*. Relance ensuite `npm install` puis `npm run dev`.

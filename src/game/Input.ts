@@ -23,6 +23,9 @@ export class Input {
   private lookLastX = 0;
   private yawDelta = 0;
 
+  /** Quand vrai (pendant un dialogue), l'avatar ne bouge pas et le joystick n'apparaît pas */
+  private _bloque = false;
+
   private joyBase: HTMLDivElement;
   private joyKnob: HTMLDivElement;
 
@@ -52,7 +55,8 @@ export class Input {
 
   private onDown(e: PointerEvent) {
     const tactile = e.pointerType !== 'mouse';
-    if (tactile && e.clientX < window.innerWidth / 2 && this.joyPointer < 0) {
+    if (tactile && e.clientX < window.innerWidth / 2) {
+      if (this._bloque || this.joyPointer >= 0) return;
       // Le joystick apparaît là où le doigt se pose
       this.joyPointer = e.pointerId;
       this.joyOrigin = { x: e.clientX, y: e.clientY };
@@ -94,6 +98,16 @@ export class Input {
     }
   }
 
+  set bloque(v: boolean) {
+    this._bloque = v;
+    if (v) {
+      this.keys.clear();
+      this.joyPointer = -1;
+      this.joyVec = { x: 0, y: 0 };
+      this.joyBase.classList.remove('visible');
+    }
+  }
+
   /** Rotation de caméra demandée depuis le dernier appel (en radians) */
   consumeYawDelta(): number {
     const d = this.yawDelta;
@@ -102,6 +116,7 @@ export class Input {
   }
 
   getMove(): MoveInput {
+    if (this._bloque) return { x: 0, z: 0, force: 0 };
     // Joystick tactile en priorité
     if (this.joyPointer >= 0) {
       const force = Math.hypot(this.joyVec.x, this.joyVec.y);

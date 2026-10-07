@@ -1,18 +1,31 @@
-import textes from '../data/textes.json';
+import { estTactile } from '../utils/appareil';
 
-/** Interface affichée par-dessus la 3D. Étape 1 : l'aide aux contrôles. */
+/** Interface affichée par-dessus la 3D : aide aux contrôles et compteur de souvenirs */
 export class Hud {
   private aide: HTMLDivElement;
+  private compteur: HTMLDivElement;
 
   constructor() {
-    const tactile = window.matchMedia('(pointer: coarse)').matches;
     this.aide = document.createElement('div');
-    this.aide.className = 'aide';
-    this.aide.textContent = tactile ? textes.aideTactile : textes.aideOrdinateur;
-    document.body.appendChild(this.aide);
+    this.aide.className = 'aide cachee';
+    this.compteur = document.createElement('div');
+    this.compteur.className = 'compteur cachee';
+    document.body.append(this.aide, this.compteur);
   }
 
-  masqueAide() {
+  afficherAide(texte?: string, texteTactile?: string) {
+    const t = (estTactile && texteTactile) || texte;
+    if (!t) return;
+    this.aide.textContent = t;
+    this.aide.classList.remove('cachee');
+  }
+
+  masquerAide() {
     this.aide.classList.add('cachee');
+  }
+
+  setCompteur(debloques: number, total: number) {
+    this.compteur.textContent = `Souvenirs : ${debloques} / ${total}`;
+    this.compteur.classList.remove('cachee');
   }
 }
