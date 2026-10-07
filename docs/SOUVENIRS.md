@@ -18,10 +18,12 @@
 - **Lieu** : Fac, Lyon
 - **Ce qui s'est passé** : c'est le jour de notre rencontre, on était en CM de maths en amphithéatre, je me suis retourné pour l'aider sur un exercice et apprendre qu'on était ensemble en TD.
 - **Scène 3D à recréer** :
-  - Décor : Amphithéatre a la fac, chaise et table en bois, sur la gauche de l'amphi, des rangés de 3 personnes.
-  - Moment de la journée et météo : journée, ensoleillé
-  - Pose des avatars : elle est assise et je suis assis également mais je suis retourné pour lui parler.
-  - Détail clé ou clin d'œil : aucun
+  - Décor : [ex : terrasse de café, deux chaises, une table, des guirlandes lumineuses]
+  - Moment de la journée et météo : [ex : soir d'été, ciel orangé]
+  - Pose des avatars : [ex : assis face à face]
+  - Détail clé ou clin d'œil : [ex : les deux cafés renversés]
+- **Cinématique d'ouverture** (ce que vos avatars rejouent tout seuls) : [ex : je l'attends à la terrasse, elle arrive, je me lève et lui fais la bise. Avec les répliques si tu veux]
+- **Ce qu'elle joue** (2 à 4 actions simples) : [ex : 1. me rejoindre à la table, 2. s'asseoir, 3. toucher la tasse de café qui se renverse]
 - **Photo** : [nom du fichier, ou "aucune"]
 - **Texte affiché** : [le message pour elle]
 - **Réplique du MJ avant** : "Est ce que tu te souviens de notre première rencontre?"
@@ -39,6 +41,8 @@
   - Moment de la journée et météo :
   - Pose des avatars :
   - Détail clé ou clin d'œil :
+- **Cinématique d'ouverture** :
+- **Ce qu'elle joue** :
 - **Photo** :
 - **Texte affiché** :
 - **Réplique du MJ avant** :
@@ -56,6 +60,8 @@
   - Moment de la journée et météo :
   - Pose des avatars :
   - Détail clé ou clin d'œil :
+- **Cinématique d'ouverture** :
+- **Ce qu'elle joue** :
 - **Photo** :
 - **Texte affiché** :
 - **Réplique du MJ avant** :

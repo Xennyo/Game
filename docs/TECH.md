@@ -7,7 +7,7 @@
 | Moteur 3D | Three.js | Standard du web 3D, très documenté, tourne dans tous les navigateurs |
 | Outil de build | Vite | Démarrage instantané, rechargement automatique, build simple |
 | Langage | TypeScript | Moins d'erreurs, et Claude s'y retrouve mieux sur un projet qui grandit |
-| Joystick mobile | nipplejs (ou joystick maison) | Léger et éprouvé |
+| Joystick mobile | Joystick maison | Quelques lignes de code, aucune dépendance en plus |
 | Hébergement | Cloudflare Pages | Déjà utilisé par Olivier, gratuit, déploiement automatique depuis GitHub |
 
 Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des collisions par boîtes englobantes suffisent pour se promener. Ajouter Rapier seulement si c'est vraiment nécessaire.
@@ -31,7 +31,7 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     │   ├── GameMaster.ts# avatar du MJ, déplacements, dialogues
     │   ├── Camera.ts    # caméra à la troisième personne
     │   ├── Input.ts     # clavier et joystick tactile
-    │   └── Memory.ts    # zone de souvenir : déclenchement, scène, déblocage
+    │   └── Memory.ts    # zone de souvenir : déclenchement, scène, séquence (cinématique puis actions jouées), déblocage
     ├── ui/
     │   ├── Dialogue.ts  # bulle de dialogue du MJ
     │   ├── MemoryCard.ts# affichage photo et texte
@@ -58,6 +58,16 @@ L'interface (dialogues, photos, textes) se fait en HTML et CSS par-dessus le can
   "posesAvatars": { "joueuse": "assise", "mj": "assis" },
   "photo": "photos/01-premier-rdv.webp",
   "texte": "...",
+  "sequence": [
+    { "type": "cinematique", "actions": [
+      { "qui": "mj", "allerA": [2, 0, 1] },
+      { "qui": "joueuse", "allerA": [3, 0, 1] },
+      { "qui": "mj", "dit": "Te voilà enfin !" }
+    ] },
+    { "type": "aller", "cible": [2, 0, 0], "aide": "Rejoins-moi à la table" },
+    { "type": "interagir", "objet": "tasse", "aide": "Touche la tasse" },
+    { "type": "pose", "joueuse": "assise", "mj": "assis" }
+  ],
   "mjAvant": ["Tu te souviens de cet endroit ?"],
   "mjApres": ["J'étais tellement stressé ce jour-là..."]
 }
