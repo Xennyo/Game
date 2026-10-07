@@ -16,7 +16,7 @@
       "Si j'avais su où ça nous mènerait"
     ],
     "scene": {
-      "rayon": 6,
+      "rayon": 7,
       "ambiance": {
         "ciel": "#cfe6f7",
         "lumiere": "jour",
@@ -28,12 +28,12 @@
           "forme": "boite",
           "position": [
             0,
-            2,
+            2.5,
             -6.2
           ],
           "taille": [
             12.4,
-            4,
+            5,
             0.3
           ],
           "couleur": "#f4f1ea"
@@ -54,17 +54,47 @@
           "couleur": "#2f4a3a"
         },
         {
+          "nom": "bureau du prof",
+          "forme": "boite",
+          "position": [
+            -1.5,
+            0.45,
+            -4.6
+          ],
+          "taille": [
+            2.2,
+            0.9,
+            0.8
+          ],
+          "couleur": "#94643a"
+        },
+        {
+          "nom": "mur arrière",
+          "forme": "boite",
+          "position": [
+            0,
+            3,
+            4.45
+          ],
+          "taille": [
+            12.4,
+            6,
+            0.3
+          ],
+          "couleur": "#f4f1ea"
+        },
+        {
           "nom": "mur gauche",
           "forme": "boite",
           "position": [
             -6.2,
-            2,
-            0
+            3,
+            -1.025
           ],
           "taille": [
             0.3,
-            4,
-            12.4
+            6,
+            10.65
           ],
           "couleur": "#f4f1ea"
         },
@@ -73,203 +103,728 @@
           "forme": "boite",
           "position": [
             6.2,
-            2,
-            0
+            3,
+            -1.025
           ],
           "taille": [
             0.3,
-            4,
-            12.4
+            6,
+            10.65
           ],
           "couleur": "#f4f1ea"
         },
         {
-          "nom": "rang 1 : table",
+          "nom": "gauche rang 1 : table",
           "forme": "boite",
           "position": [
-            0,
+            -1.8,
             0.74,
-            -2.5
+            -2.0
           ],
           "taille": [
-            9,
+            7.6,
             0.06,
             0.6
           ],
           "couleur": "#a8743f"
         },
         {
-          "nom": "rang 1 : façade",
+          "nom": "gauche rang 1 : façade",
           "forme": "boite",
           "position": [
-            0,
+            -1.8,
             0.37,
-            -2.7800000000000002
+            -2.28
           ],
           "taille": [
-            9,
+            7.6,
             0.7,
             0.05
           ],
           "couleur": "#94643a"
         },
         {
-          "nom": "rang 1 : banc",
+          "nom": "gauche rang 1 : banc",
           "forme": "boite",
           "position": [
-            0,
+            -1.8,
             0.42,
-            -1.88
+            -1.45
           ],
           "taille": [
-            9,
+            7.6,
             0.07,
             0.4
           ],
           "couleur": "#8a5a32"
         },
         {
-          "nom": "rang 2 : table",
+          "nom": "droite rang 1 : table",
           "forme": "boite",
           "position": [
-            0,
+            4.5,
             0.74,
-            0
+            -2.0
           ],
           "taille": [
-            9,
+            2.6,
             0.06,
             0.6
           ],
           "couleur": "#a8743f"
         },
         {
-          "nom": "rang 2 : façade",
+          "nom": "droite rang 1 : façade",
           "forme": "boite",
           "position": [
-            0,
+            4.5,
             0.37,
-            -0.28
+            -2.28
           ],
           "taille": [
-            9,
+            2.6,
             0.7,
             0.05
           ],
           "couleur": "#94643a"
         },
         {
-          "nom": "rang 2 : banc",
+          "nom": "droite rang 1 : banc",
           "forme": "boite",
           "position": [
-            0,
+            4.5,
             0.42,
-            0.62
+            -1.45
           ],
           "taille": [
-            9,
+            2.6,
             0.07,
             0.4
           ],
           "couleur": "#8a5a32"
         },
         {
-          "nom": "rang 3 : table",
+          "nom": "gauche gradin 2",
           "forme": "boite",
           "position": [
-            0,
-            0.74,
-            2.5
+            -1.8,
+            0.2,
+            -0.6
           ],
           "taille": [
-            9,
+            7.6,
+            0.4,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "gauche rang 2 : table",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.14,
+            -0.6
+          ],
+          "taille": [
+            7.6,
             0.06,
             0.6
           ],
           "couleur": "#a8743f"
         },
         {
-          "nom": "rang 3 : façade",
+          "nom": "gauche rang 2 : façade",
           "forme": "boite",
           "position": [
-            0,
-            0.37,
-            2.2199999999999998
+            -1.8,
+            0.77,
+            -0.88
           ],
           "taille": [
-            9,
+            7.6,
             0.7,
             0.05
           ],
           "couleur": "#94643a"
         },
         {
-          "nom": "rang 3 : banc",
+          "nom": "gauche rang 2 : banc",
           "forme": "boite",
           "position": [
-            0,
-            0.42,
-            3.12
+            -1.8,
+            0.82,
+            -0.05
           ],
           "taille": [
-            9,
+            7.6,
             0.07,
             0.4
           ],
           "couleur": "#8a5a32"
         },
         {
-          "nom": "rang 4 : table",
+          "nom": "droite gradin 2",
           "forme": "boite",
           "position": [
-            0,
-            0.74,
-            5
+            4.5,
+            0.2,
+            -0.6
           ],
           "taille": [
-            9,
+            2.6,
+            0.4,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "droite rang 2 : table",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.14,
+            -0.6
+          ],
+          "taille": [
+            2.6,
             0.06,
             0.6
           ],
           "couleur": "#a8743f"
         },
         {
-          "nom": "rang 4 : façade",
+          "nom": "droite rang 2 : façade",
           "forme": "boite",
           "position": [
-            0,
-            0.37,
-            4.72
+            4.5,
+            0.77,
+            -0.88
           ],
           "taille": [
-            9,
+            2.6,
             0.7,
             0.05
           ],
           "couleur": "#94643a"
         },
         {
-          "nom": "rang 4 : banc",
+          "nom": "droite rang 2 : banc",
           "forme": "boite",
           "position": [
-            0,
-            0.42,
-            5.62
+            4.5,
+            0.82,
+            -0.05
           ],
           "taille": [
-            9,
+            2.6,
             0.07,
             0.4
           ],
           "couleur": "#8a5a32"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.1,
+            -0.95
+          ],
+          "taille": [
+            1.2,
+            0.2,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.2,
+            -0.25
+          ],
+          "taille": [
+            1.2,
+            0.4,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "gauche gradin 3",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            0.4,
+            0.8
+          ],
+          "taille": [
+            7.6,
+            0.8,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "gauche rang 3 : table",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.54,
+            0.8
+          ],
+          "taille": [
+            7.6,
+            0.06,
+            0.6
+          ],
+          "couleur": "#a8743f"
+        },
+        {
+          "nom": "gauche rang 3 : façade",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.17,
+            0.52
+          ],
+          "taille": [
+            7.6,
+            0.7,
+            0.05
+          ],
+          "couleur": "#94643a"
+        },
+        {
+          "nom": "gauche rang 3 : banc",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.22,
+            1.35
+          ],
+          "taille": [
+            7.6,
+            0.07,
+            0.4
+          ],
+          "couleur": "#8a5a32"
+        },
+        {
+          "nom": "droite gradin 3",
+          "forme": "boite",
+          "position": [
+            4.5,
+            0.4,
+            0.8
+          ],
+          "taille": [
+            2.6,
+            0.8,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "droite rang 3 : table",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.54,
+            0.8
+          ],
+          "taille": [
+            2.6,
+            0.06,
+            0.6
+          ],
+          "couleur": "#a8743f"
+        },
+        {
+          "nom": "droite rang 3 : façade",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.17,
+            0.52
+          ],
+          "taille": [
+            2.6,
+            0.7,
+            0.05
+          ],
+          "couleur": "#94643a"
+        },
+        {
+          "nom": "droite rang 3 : banc",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.22,
+            1.35
+          ],
+          "taille": [
+            2.6,
+            0.07,
+            0.4
+          ],
+          "couleur": "#8a5a32"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.3,
+            0.45
+          ],
+          "taille": [
+            1.2,
+            0.6,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.4,
+            1.15
+          ],
+          "taille": [
+            1.2,
+            0.8,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "gauche gradin 4",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            0.6,
+            2.2
+          ],
+          "taille": [
+            7.6,
+            1.2,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "gauche rang 4 : table",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.94,
+            2.2
+          ],
+          "taille": [
+            7.6,
+            0.06,
+            0.6
+          ],
+          "couleur": "#a8743f"
+        },
+        {
+          "nom": "gauche rang 4 : façade",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.57,
+            1.92
+          ],
+          "taille": [
+            7.6,
+            0.7,
+            0.05
+          ],
+          "couleur": "#94643a"
+        },
+        {
+          "nom": "gauche rang 4 : banc",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.62,
+            2.75
+          ],
+          "taille": [
+            7.6,
+            0.07,
+            0.4
+          ],
+          "couleur": "#8a5a32"
+        },
+        {
+          "nom": "droite gradin 4",
+          "forme": "boite",
+          "position": [
+            4.5,
+            0.6,
+            2.2
+          ],
+          "taille": [
+            2.6,
+            1.2,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "droite rang 4 : table",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.94,
+            2.2
+          ],
+          "taille": [
+            2.6,
+            0.06,
+            0.6
+          ],
+          "couleur": "#a8743f"
+        },
+        {
+          "nom": "droite rang 4 : façade",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.57,
+            1.92
+          ],
+          "taille": [
+            2.6,
+            0.7,
+            0.05
+          ],
+          "couleur": "#94643a"
+        },
+        {
+          "nom": "droite rang 4 : banc",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.62,
+            2.75
+          ],
+          "taille": [
+            2.6,
+            0.07,
+            0.4
+          ],
+          "couleur": "#8a5a32"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.5,
+            1.85
+          ],
+          "taille": [
+            1.2,
+            1.0,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.6,
+            2.55
+          ],
+          "taille": [
+            1.2,
+            1.2,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "gauche gradin 5",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            0.8,
+            3.6
+          ],
+          "taille": [
+            7.6,
+            1.6,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "gauche rang 5 : table",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            2.34,
+            3.6
+          ],
+          "taille": [
+            7.6,
+            0.06,
+            0.6
+          ],
+          "couleur": "#a8743f"
+        },
+        {
+          "nom": "gauche rang 5 : façade",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            1.97,
+            3.32
+          ],
+          "taille": [
+            7.6,
+            0.7,
+            0.05
+          ],
+          "couleur": "#94643a"
+        },
+        {
+          "nom": "gauche rang 5 : banc",
+          "forme": "boite",
+          "position": [
+            -1.8,
+            2.02,
+            4.15
+          ],
+          "taille": [
+            7.6,
+            0.07,
+            0.4
+          ],
+          "couleur": "#8a5a32"
+        },
+        {
+          "nom": "droite gradin 5",
+          "forme": "boite",
+          "position": [
+            4.5,
+            0.8,
+            3.6
+          ],
+          "taille": [
+            2.6,
+            1.6,
+            1.4
+          ],
+          "couleur": "#cbbba3"
+        },
+        {
+          "nom": "droite rang 5 : table",
+          "forme": "boite",
+          "position": [
+            4.5,
+            2.34,
+            3.6
+          ],
+          "taille": [
+            2.6,
+            0.06,
+            0.6
+          ],
+          "couleur": "#a8743f"
+        },
+        {
+          "nom": "droite rang 5 : façade",
+          "forme": "boite",
+          "position": [
+            4.5,
+            1.97,
+            3.32
+          ],
+          "taille": [
+            2.6,
+            0.7,
+            0.05
+          ],
+          "couleur": "#94643a"
+        },
+        {
+          "nom": "droite rang 5 : banc",
+          "forme": "boite",
+          "position": [
+            4.5,
+            2.02,
+            4.15
+          ],
+          "taille": [
+            2.6,
+            0.07,
+            0.4
+          ],
+          "couleur": "#8a5a32"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.7,
+            3.25
+          ],
+          "taille": [
+            1.2,
+            1.4,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "escalier : marche",
+          "forme": "boite",
+          "position": [
+            2.6,
+            0.8,
+            3.95
+          ],
+          "taille": [
+            1.2,
+            1.6,
+            0.7
+          ],
+          "couleur": "#bfae95"
+        },
+        {
+          "nom": "rampe",
+          "forme": "boite",
+          "position": [
+            2.05,
+            1.7,
+            0.8
+          ],
+          "taille": [
+            0.05,
+            0.05,
+            7.0
+          ],
+          "couleur": "#5b5b5b"
         },
         {
           "nom": "cahier de maths",
           "forme": "boite",
           "position": [
-            -0.6,
-            0.78,
-            2.45
+            1.45,
+            1.58,
+            0.75
           ],
           "taille": [
             0.45,
@@ -277,6 +832,245 @@
             0.32
           ],
           "couleur": "#ffffff"
+        },
+        {
+          "nom": "feuille d'Olivier",
+          "forme": "boite",
+          "position": [
+            1.45,
+            1.18,
+            -0.65
+          ],
+          "taille": [
+            0.3,
+            0.01,
+            0.4
+          ],
+          "couleur": "#ffffff"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -3.5,
+            0.4,
+            -1.4
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -0.5,
+            0.4,
+            -1.4
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -4.2,
+            0.8,
+            -0.0
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -2.0,
+            0.8,
+            -0.0
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -3.0,
+            1.2,
+            1.4
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -1.2,
+            1.2,
+            1.4
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -4.5,
+            1.6,
+            2.8
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            0.2,
+            1.6,
+            2.8
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -2.4,
+            1.6,
+            2.8
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -3.6,
+            2.0,
+            4.2
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            -0.8,
+            2.0,
+            4.2
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            4.4,
+            0.4,
+            -1.4
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            4.8,
+            1.2,
+            1.4
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            3.9,
+            1.6,
+            2.8
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            5.0,
+            2.0,
+            4.2
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
+        },
+        {
+          "nom": "étudiant (figurant)",
+          "forme": "capsule",
+          "position": [
+            4.6,
+            0.8,
+            -0.0
+          ],
+          "taille": [
+            0.32,
+            1.05
+          ],
+          "couleur": "#9a9a9a"
         }
       ]
     },
@@ -285,9 +1079,9 @@
         "type": "placer",
         "qui": "joueuse",
         "position": [
-          -0.6,
-          0,
-          3.12
+          1.45,
+          0.8,
+          1.4
         ],
         "angle": 180
       },
@@ -295,9 +1089,9 @@
         "type": "placer",
         "qui": "mj",
         "position": [
-          -0.4,
-          0,
-          0.62
+          1.45,
+          0.4,
+          -1.1102230246251565e-16
         ],
         "angle": 180
       },
@@ -314,14 +1108,14 @@
       {
         "type": "camera",
         "position": [
-          -2.2,
-          2.2,
-          1.4
+          -0.6,
+          2.6,
+          -5.2
         ],
         "regard": [
-          -0.6,
-          0.9,
-          3.0
+          1.45,
+          1.7000000000000002,
+          1.2
         ],
         "instantane": true
       },
@@ -332,14 +1126,14 @@
       {
         "type": "camera",
         "position": [
-          5,
-          3,
-          1.6
+          5.3,
+          3.6,
+          -2.6
         ],
         "regard": [
-          -0.5,
-          0.8,
-          1.9
+          1.25,
+          1.2000000000000002,
+          0.7
         ]
       },
       {
@@ -387,116 +1181,280 @@
       },
       "decor": [
         {
-          "nom": "chapiteau : socle",
+          "nom": "allée rouge",
           "forme": "cylindre",
           "position": [
             0,
-            0.15,
+            0.01,
             0
           ],
           "taille": [
-            2.4,
-            0.3
+            10.5,
+            0.02
           ],
-          "couleur": "#b9b2a6"
+          "couleur": "#b5553f",
+          "cotes": 48
         },
         {
-          "nom": "chapiteau : toit",
+          "nom": "place pavée",
+          "forme": "cylindre",
+          "position": [
+            0,
+            0.02,
+            0
+          ],
+          "taille": [
+            8,
+            0.02
+          ],
+          "couleur": "#bdb7ad",
+          "cotes": 48
+        },
+        {
+          "nom": "kiosque : socle",
+          "forme": "cylindre",
+          "position": [
+            0,
+            0.5,
+            0
+          ],
+          "taille": [
+            3.2,
+            1.0
+          ],
+          "couleur": "#e4dccf",
+          "cotes": 8
+        },
+        {
+          "nom": "kiosque : grille",
+          "forme": "cylindre",
+          "position": [
+            0,
+            1.3,
+            0
+          ],
+          "taille": [
+            3.1,
+            0.6
+          ],
+          "couleur": "#2f4a3a",
+          "cotes": 8
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            2.725,
+            2.5,
+            1.129
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            1.129,
+            2.5,
+            2.725
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            -1.129,
+            2.5,
+            2.725
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            -2.725,
+            2.5,
+            1.129
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            -2.725,
+            2.5,
+            -1.129
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            -1.129,
+            2.5,
+            -2.725
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            1.129,
+            2.5,
+            -2.725
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : poteau",
+          "forme": "cylindre",
+          "position": [
+            2.725,
+            2.5,
+            -1.129
+          ],
+          "taille": [
+            0.07,
+            3.0
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "kiosque : frise",
+          "forme": "cylindre",
+          "position": [
+            0,
+            3.95,
+            0
+          ],
+          "taille": [
+            3.9,
+            0.3
+          ],
+          "couleur": "#f3efe6",
+          "cotes": 8
+        },
+        {
+          "nom": "kiosque : auvent",
           "forme": "cone",
           "position": [
             0,
-            3.4,
+            4.35,
             0
           ],
           "taille": [
-            3,
+            4.0,
+            0.5
+          ],
+          "couleur": "#d8d6cf",
+          "cotes": 8
+        },
+        {
+          "nom": "kiosque : toit pointu",
+          "forme": "cone",
+          "position": [
+            0,
+            5.1,
+            0
+          ],
+          "taille": [
+            1.7,
+            1.3
+          ],
+          "couleur": "#c9ccce",
+          "cotes": 8
+        },
+        {
+          "nom": "kiosque : épi",
+          "forme": "cylindre",
+          "position": [
+            0,
+            5.95,
+            0
+          ],
+          "taille": [
+            0.04,
+            0.5
+          ],
+          "couleur": "#6b6b6b"
+        },
+        {
+          "nom": "kiosque : marche",
+          "forme": "boite",
+          "position": [
+            -3.2,
+            0.495,
+            1.2
+          ],
+          "taille": [
+            0.4,
+            0.99,
             1.4
           ],
-          "couleur": "#7d8c7a"
+          "couleur": "#e4dccf"
         },
         {
-          "nom": "chapiteau : poteau",
-          "forme": "cylindre",
+          "nom": "kiosque : marche",
+          "forme": "boite",
           "position": [
-            2.1,
-            1.6,
-            0.0
+            -3.6,
+            0.33,
+            1.2
           ],
           "taille": [
-            0.08,
-            2.6
+            0.4,
+            0.66,
+            1.4
           ],
-          "couleur": "#5b5b5b"
+          "couleur": "#e4dccf"
         },
         {
-          "nom": "chapiteau : poteau",
-          "forme": "cylindre",
+          "nom": "kiosque : marche",
+          "forme": "boite",
           "position": [
-            1.05,
-            1.6,
-            1.82
+            -4.0,
+            0.165,
+            1.2
           ],
           "taille": [
-            0.08,
-            2.6
+            0.4,
+            0.33,
+            1.4
           ],
-          "couleur": "#5b5b5b"
-        },
-        {
-          "nom": "chapiteau : poteau",
-          "forme": "cylindre",
-          "position": [
-            -1.05,
-            1.6,
-            1.82
-          ],
-          "taille": [
-            0.08,
-            2.6
-          ],
-          "couleur": "#5b5b5b"
-        },
-        {
-          "nom": "chapiteau : poteau",
-          "forme": "cylindre",
-          "position": [
-            -2.1,
-            1.6,
-            0.0
-          ],
-          "taille": [
-            0.08,
-            2.6
-          ],
-          "couleur": "#5b5b5b"
-        },
-        {
-          "nom": "chapiteau : poteau",
-          "forme": "cylindre",
-          "position": [
-            -1.05,
-            1.6,
-            -1.82
-          ],
-          "taille": [
-            0.08,
-            2.6
-          ],
-          "couleur": "#5b5b5b"
-        },
-        {
-          "nom": "chapiteau : poteau",
-          "forme": "cylindre",
-          "position": [
-            1.05,
-            1.6,
-            -1.82
-          ],
-          "taille": [
-            0.08,
-            2.6
-          ],
-          "couleur": "#5b5b5b"
+          "couleur": "#e4dccf"
         },
         {
           "nom": "notre banc : assise",
@@ -504,15 +1462,14 @@
           "position": [
             0.0,
             0.45,
-            5.0
+            5.4
           ],
           "taille": [
             2,
             0.08,
             0.5
           ],
-          "couleur": "#8a5a32",
-          "rotation": 0
+          "couleur": "#8a5a32"
         },
         {
           "nom": "notre banc : dossier",
@@ -520,15 +1477,14 @@
           "position": [
             0.0,
             0.8,
-            5.25
+            5.15
           ],
           "taille": [
             2,
             0.5,
             0.06
           ],
-          "couleur": "#8a5a32",
-          "rotation": 0
+          "couleur": "#8a5a32"
         },
         {
           "nom": "notre banc : pied",
@@ -536,15 +1492,14 @@
           "position": [
             -0.85,
             0.22,
-            5.0
+            5.4
           ],
           "taille": [
             0.08,
             0.44,
             0.45
           ],
-          "couleur": "#3a3a3a",
-          "rotation": 0
+          "couleur": "#2b2b2b"
         },
         {
           "nom": "notre banc : pied",
@@ -552,251 +1507,680 @@
           "position": [
             0.85,
             0.22,
+            5.4
+          ],
+          "taille": [
+            0.08,
+            0.44,
+            0.45
+          ],
+          "couleur": "#2b2b2b"
+        },
+        {
+          "nom": "banc : assise",
+          "forme": "boite",
+          "position": [
+            -4.677,
+            0.45,
+            2.7
+          ],
+          "taille": [
+            2,
+            0.08,
+            0.5
+          ],
+          "couleur": "#8a5a32",
+          "rotation": -60
+        },
+        {
+          "nom": "banc : dossier",
+          "forme": "boite",
+          "position": [
+            -4.46,
+            0.8,
+            2.575
+          ],
+          "taille": [
+            2,
+            0.5,
+            0.06
+          ],
+          "couleur": "#8a5a32",
+          "rotation": -60
+        },
+        {
+          "nom": "banc : pied",
+          "forme": "boite",
+          "position": [
+            -5.102,
+            0.22,
+            1.964
+          ],
+          "taille": [
+            0.08,
+            0.44,
+            0.45
+          ],
+          "couleur": "#2b2b2b",
+          "rotation": -60
+        },
+        {
+          "nom": "banc : pied",
+          "forme": "boite",
+          "position": [
+            -4.252,
+            0.22,
+            3.436
+          ],
+          "taille": [
+            0.08,
+            0.44,
+            0.45
+          ],
+          "couleur": "#2b2b2b",
+          "rotation": -60
+        },
+        {
+          "nom": "banc : assise",
+          "forme": "boite",
+          "position": [
+            4.677,
+            0.45,
+            2.7
+          ],
+          "taille": [
+            2,
+            0.08,
+            0.5
+          ],
+          "couleur": "#8a5a32",
+          "rotation": 60
+        },
+        {
+          "nom": "banc : dossier",
+          "forme": "boite",
+          "position": [
+            4.46,
+            0.8,
+            2.575
+          ],
+          "taille": [
+            2,
+            0.5,
+            0.06
+          ],
+          "couleur": "#8a5a32",
+          "rotation": 60
+        },
+        {
+          "nom": "banc : pied",
+          "forme": "boite",
+          "position": [
+            4.252,
+            0.22,
+            3.436
+          ],
+          "taille": [
+            0.08,
+            0.44,
+            0.45
+          ],
+          "couleur": "#2b2b2b",
+          "rotation": 60
+        },
+        {
+          "nom": "banc : pied",
+          "forme": "boite",
+          "position": [
+            5.102,
+            0.22,
+            1.964
+          ],
+          "taille": [
+            0.08,
+            0.44,
+            0.45
+          ],
+          "couleur": "#2b2b2b",
+          "rotation": 60
+        },
+        {
+          "nom": "banc : assise",
+          "forme": "boite",
+          "position": [
+            -5.4,
+            0.45,
+            -1.5
+          ],
+          "taille": [
+            2,
+            0.08,
+            0.5
+          ],
+          "couleur": "#8a5a32",
+          "rotation": -100
+        },
+        {
+          "nom": "banc : dossier",
+          "forme": "boite",
+          "position": [
+            -5.154,
+            0.8,
+            -1.457
+          ],
+          "taille": [
+            2,
+            0.5,
+            0.06
+          ],
+          "couleur": "#8a5a32",
+          "rotation": -100
+        },
+        {
+          "nom": "banc : pied",
+          "forme": "boite",
+          "position": [
+            -5.252,
+            0.22,
+            -2.337
+          ],
+          "taille": [
+            0.08,
+            0.44,
+            0.45
+          ],
+          "couleur": "#2b2b2b",
+          "rotation": -100
+        },
+        {
+          "nom": "banc : pied",
+          "forme": "boite",
+          "position": [
+            -5.548,
+            0.22,
+            -0.663
+          ],
+          "taille": [
+            0.08,
+            0.44,
+            0.45
+          ],
+          "couleur": "#2b2b2b",
+          "rotation": -100
+        },
+        {
+          "nom": "lampadaire",
+          "forme": "cylindre",
+          "position": [
+            -1.9,
+            1.8,
+            4.0
+          ],
+          "taille": [
+            0.08,
+            3.6
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "lampadaire : socle",
+          "forme": "cylindre",
+          "position": [
+            -1.9,
+            0.25,
+            4.0
+          ],
+          "taille": [
+            0.18,
+            0.5
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "lampadaire : bras",
+          "forme": "boite",
+          "position": [
+            -1.9,
+            3.4,
+            4.0
+          ],
+          "taille": [
+            1.0,
+            0.05,
+            0.05
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "lampadaire : lanterne",
+          "forme": "boite",
+          "position": [
+            -2.4,
+            3.25,
+            4.0
+          ],
+          "taille": [
+            0.22,
+            0.35,
+            0.22
+          ],
+          "couleur": "#f3efe0"
+        },
+        {
+          "nom": "lampadaire : lanterne",
+          "forme": "boite",
+          "position": [
+            -1.4,
+            3.25,
+            4.0
+          ],
+          "taille": [
+            0.22,
+            0.35,
+            0.22
+          ],
+          "couleur": "#f3efe0"
+        },
+        {
+          "nom": "lampadaire : lanterne",
+          "forme": "boite",
+          "position": [
+            -1.9,
+            3.65,
+            4.0
+          ],
+          "taille": [
+            0.22,
+            0.35,
+            0.22
+          ],
+          "couleur": "#f3efe0"
+        },
+        {
+          "nom": "lampadaire",
+          "forme": "cylindre",
+          "position": [
+            2.6,
+            1.8,
+            3.6
+          ],
+          "taille": [
+            0.08,
+            3.6
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "lampadaire : socle",
+          "forme": "cylindre",
+          "position": [
+            2.6,
+            0.25,
+            3.6
+          ],
+          "taille": [
+            0.18,
+            0.5
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "lampadaire : bras",
+          "forme": "boite",
+          "position": [
+            2.6,
+            3.4,
+            3.6
+          ],
+          "taille": [
+            1.0,
+            0.05,
+            0.05
+          ],
+          "couleur": "#3d5a46"
+        },
+        {
+          "nom": "lampadaire : lanterne",
+          "forme": "boite",
+          "position": [
+            2.1,
+            3.25,
+            3.6
+          ],
+          "taille": [
+            0.22,
+            0.35,
+            0.22
+          ],
+          "couleur": "#f3efe0"
+        },
+        {
+          "nom": "lampadaire : lanterne",
+          "forme": "boite",
+          "position": [
+            3.1,
+            3.25,
+            3.6
+          ],
+          "taille": [
+            0.22,
+            0.35,
+            0.22
+          ],
+          "couleur": "#f3efe0"
+        },
+        {
+          "nom": "lampadaire : lanterne",
+          "forme": "boite",
+          "position": [
+            2.6,
+            3.65,
+            3.6
+          ],
+          "taille": [
+            0.22,
+            0.35,
+            0.22
+          ],
+          "couleur": "#f3efe0"
+        },
+        {
+          "nom": "poubelle",
+          "forme": "cylindre",
+          "position": [
+            1.6,
+            0.4,
+            5.6
+          ],
+          "taille": [
+            0.25,
+            0.8
+          ],
+          "couleur": "#2f3f35"
+        },
+        {
+          "nom": "borne en pierre",
+          "forme": "boite",
+          "position": [
+            -1.6,
+            0.5,
             5.0
           ],
           "taille": [
-            0.08,
-            0.44,
-            0.45
-          ],
-          "couleur": "#3a3a3a",
-          "rotation": 0
-        },
-        {
-          "nom": "banc : assise",
-          "forme": "boite",
-          "position": [
-            -5.5,
-            0.45,
-            -1.0
-          ],
-          "taille": [
-            2,
-            0.08,
+            0.5,
+            1.0,
             0.5
           ],
-          "couleur": "#8a5a32",
-          "rotation": 90
+          "couleur": "#e4dccf"
         },
         {
-          "nom": "banc : dossier",
-          "forme": "boite",
-          "position": [
-            -5.25,
-            0.8,
-            -1.0
-          ],
-          "taille": [
-            2,
-            0.5,
-            0.06
-          ],
-          "couleur": "#8a5a32",
-          "rotation": 90
-        },
-        {
-          "nom": "banc : pied",
-          "forme": "boite",
-          "position": [
-            -5.5,
-            0.22,
-            -0.15
-          ],
-          "taille": [
-            0.08,
-            0.44,
-            0.45
-          ],
-          "couleur": "#3a3a3a",
-          "rotation": 90
-        },
-        {
-          "nom": "banc : pied",
-          "forme": "boite",
-          "position": [
-            -5.5,
-            0.22,
-            -1.85
-          ],
-          "taille": [
-            0.08,
-            0.44,
-            0.45
-          ],
-          "couleur": "#3a3a3a",
-          "rotation": 90
-        },
-        {
-          "nom": "banc : assise",
-          "forme": "boite",
-          "position": [
-            5.5,
-            0.45,
-            -1.0
-          ],
-          "taille": [
-            2,
-            0.08,
-            0.5
-          ],
-          "couleur": "#8a5a32",
-          "rotation": -90
-        },
-        {
-          "nom": "banc : dossier",
-          "forme": "boite",
-          "position": [
-            5.25,
-            0.8,
-            -1.0
-          ],
-          "taille": [
-            2,
-            0.5,
-            0.06
-          ],
-          "couleur": "#8a5a32",
-          "rotation": -90
-        },
-        {
-          "nom": "banc : pied",
-          "forme": "boite",
-          "position": [
-            5.5,
-            0.22,
-            -1.85
-          ],
-          "taille": [
-            0.08,
-            0.44,
-            0.45
-          ],
-          "couleur": "#3a3a3a",
-          "rotation": -90
-        },
-        {
-          "nom": "banc : pied",
-          "forme": "boite",
-          "position": [
-            5.5,
-            0.22,
-            -0.15
-          ],
-          "taille": [
-            0.08,
-            0.44,
-            0.45
-          ],
-          "couleur": "#3a3a3a",
-          "rotation": -90
-        },
-        {
-          "nom": "lampadaire",
+          "nom": "arbre : tronc",
           "forme": "cylindre",
           "position": [
-            -7,
-            1.6,
+            -9,
+            1.5,
+            9
+          ],
+          "taille": [
+            0.2,
+            3
+          ],
+          "couleur": "#6b4a33"
+        },
+        {
+          "nom": "arbre : feuillage",
+          "forme": "sphere",
+          "position": [
+            -9,
+            3.8,
+            9
+          ],
+          "taille": [
+            1.8
+          ],
+          "couleur": "#c9783a"
+        },
+        {
+          "nom": "arbre : tronc",
+          "forme": "cylindre",
+          "position": [
+            -12,
+            1.5,
             2
           ],
           "taille": [
-            0.06,
-            3.2
+            0.2,
+            3
           ],
-          "couleur": "#3a3a3a"
+          "couleur": "#6b4a33"
         },
         {
-          "nom": "lampadaire : lampe",
+          "nom": "arbre : feuillage",
           "forme": "sphere",
           "position": [
-            -7,
-            3.3,
+            -12,
+            3.8,
             2
           ],
           "taille": [
-            0.22
+            1.8
           ],
-          "couleur": "#fff3c4"
+          "couleur": "#b5653a"
         },
         {
-          "nom": "lampadaire",
+          "nom": "arbre : tronc",
           "forme": "cylindre",
           "position": [
-            4,
-            1.6,
-            4
+            -10,
+            1.5,
+            -7
           ],
           "taille": [
-            0.06,
-            3.2
+            0.2,
+            3
           ],
-          "couleur": "#3a3a3a"
+          "couleur": "#6b4a33"
         },
         {
-          "nom": "lampadaire : lampe",
+          "nom": "arbre : feuillage",
           "forme": "sphere",
           "position": [
-            4,
-            3.3,
-            4
+            -10,
+            3.8,
+            -7
           ],
           "taille": [
-            0.22
+            1.8
           ],
-          "couleur": "#fff3c4"
+          "couleur": "#d49a4a"
         },
         {
-          "nom": "lampadaire",
+          "nom": "arbre : tronc",
           "forme": "cylindre",
           "position": [
-            -4,
-            1.6,
-            -5
+            9,
+            1.5,
+            9
           ],
           "taille": [
-            0.06,
-            3.2
+            0.2,
+            3
           ],
-          "couleur": "#3a3a3a"
+          "couleur": "#6b4a33"
         },
         {
-          "nom": "lampadaire : lampe",
+          "nom": "arbre : feuillage",
           "forme": "sphere",
           "position": [
-            -4,
-            3.3,
-            -5
+            9,
+            3.8,
+            9
           ],
           "taille": [
-            0.22
+            1.8
           ],
-          "couleur": "#fff3c4"
+          "couleur": "#c9783a"
         },
         {
-          "nom": "lampadaire",
+          "nom": "arbre : tronc",
           "forme": "cylindre",
           "position": [
-            4,
-            1.6,
-            -5
+            12,
+            1.5,
+            1
           ],
           "taille": [
-            0.06,
-            3.2
+            0.2,
+            3
           ],
-          "couleur": "#3a3a3a"
+          "couleur": "#6b4a33"
         },
         {
-          "nom": "lampadaire : lampe",
+          "nom": "arbre : feuillage",
           "forme": "sphere",
           "position": [
-            4,
-            3.3,
-            -5
+            12,
+            3.8,
+            1
           ],
           "taille": [
-            0.22
+            1.8
           ],
-          "couleur": "#fff3c4"
+          "couleur": "#b5653a"
+        },
+        {
+          "nom": "arbre : tronc",
+          "forme": "cylindre",
+          "position": [
+            8,
+            1.5,
+            -9
+          ],
+          "taille": [
+            0.2,
+            3
+          ],
+          "couleur": "#6b4a33"
+        },
+        {
+          "nom": "arbre : feuillage",
+          "forme": "sphere",
+          "position": [
+            8,
+            3.8,
+            -9
+          ],
+          "taille": [
+            1.8
+          ],
+          "couleur": "#d49a4a"
+        },
+        {
+          "nom": "arbre : tronc",
+          "forme": "cylindre",
+          "position": [
+            0,
+            1.5,
+            -12
+          ],
+          "taille": [
+            0.2,
+            3
+          ],
+          "couleur": "#6b4a33"
+        },
+        {
+          "nom": "arbre : feuillage",
+          "forme": "sphere",
+          "position": [
+            0,
+            3.8,
+            -12
+          ],
+          "taille": [
+            1.8
+          ],
+          "couleur": "#c9783a"
+        },
+        {
+          "nom": "immeuble",
+          "forme": "boite",
+          "position": [
+            -15,
+            4.5,
+            -6
+          ],
+          "taille": [
+            8,
+            9,
+            6
+          ],
+          "couleur": "#e8dcc6",
+          "rotation": 68
+        },
+        {
+          "nom": "immeuble",
+          "forme": "boite",
+          "position": [
+            -6,
+            6.0,
+            -16
+          ],
+          "taille": [
+            10,
+            12,
+            6
+          ],
+          "couleur": "#d9c6aa",
+          "rotation": 21
+        },
+        {
+          "nom": "immeuble",
+          "forme": "boite",
+          "position": [
+            8,
+            5.0,
+            -15
+          ],
+          "taille": [
+            9,
+            10,
+            6
+          ],
+          "couleur": "#efe6d6",
+          "rotation": -28
+        },
+        {
+          "nom": "immeuble",
+          "forme": "boite",
+          "position": [
+            16,
+            7.0,
+            -3
+          ],
+          "taille": [
+            6,
+            14,
+            6
+          ],
+          "couleur": "#e8dcc6",
+          "rotation": -79
+        },
+        {
+          "nom": "immeuble",
+          "forme": "boite",
+          "position": [
+            15,
+            4.5,
+            10
+          ],
+          "taille": [
+            8,
+            9,
+            6
+          ],
+          "couleur": "#d9c6aa",
+          "rotation": -124
         }
       ]
     },
@@ -805,9 +2189,9 @@
         "type": "placer",
         "qui": "mj",
         "position": [
-          -6,
+          -7,
           0,
-          1
+          8
         ],
         "angle": 90
       },
@@ -815,9 +2199,9 @@
         "type": "placer",
         "qui": "joueuse",
         "position": [
-          -7.2,
+          -8.2,
           0,
-          1.8
+          8.8
         ],
         "angle": 90
       },
@@ -852,14 +2236,14 @@
       {
         "type": "camera",
         "position": [
-          -6.5,
-          2.5,
-          8
+          5,
+          2.6,
+          11.5
         ],
         "regard": [
           -1.5,
-          0.8,
-          3.5
+          0.9,
+          6.5
         ],
         "instantane": true
       },
@@ -867,9 +2251,9 @@
         "type": "marcher",
         "qui": "joueuse",
         "vers": [
-          -3,
+          -3.6,
           0,
-          3.4
+          7.8
         ],
         "attendre": false
       },
@@ -879,7 +2263,7 @@
         "vers": [
           0.45,
           0,
-          4.4
+          6.3
         ]
       },
       {
@@ -888,21 +2272,21 @@
         "vers": [
           0.45,
           0,
-          5
+          5.4
         ]
       },
       {
         "type": "pose",
         "qui": "mj",
         "pose": "assis",
-        "angle": 180
+        "angle": 0
       },
       {
         "type": "aller",
         "cible": [
           -0.45,
           0,
-          4.4
+          6.5
         ],
         "aide": "Rejoins le banc",
         "aideTactile": "Rejoins le banc"
@@ -913,26 +2297,26 @@
         "vers": [
           -0.45,
           0,
-          5
+          5.4
         ]
       },
       {
         "type": "pose",
         "qui": "joueuse",
         "pose": "assis",
-        "angle": 180
+        "angle": 0
       },
       {
         "type": "camera",
         "position": [
           0,
           1.7,
-          1.6
+          9.6
         ],
         "regard": [
           0,
-          0.9,
-          5
+          1.0,
+          5.4
         ]
       },
       {

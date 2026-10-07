@@ -61,7 +61,8 @@ export async function jouerScript(etapes: Etape[], a: Acteurs, origine = new THR
         await a.dialogue(e.lignes);
         break;
       case 'placer':
-        a.perso(e.qui).placer(sol(e.position), e.angle === undefined ? undefined : e.angle * DEG);
+        // La hauteur compte ici : un avatar peut être placé sur une marche ou un gradin
+        a.perso(e.qui).placer(vec(e.position), e.angle === undefined ? undefined : e.angle * DEG);
         break;
       case 'marcher': {
         const marche = a.perso(e.qui).marcherVers(cible(e.qui, e.vers));
