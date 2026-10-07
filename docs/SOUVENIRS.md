@@ -24,7 +24,7 @@
   - Détail clé ou clin d'œil : aucun
 - **Cinématique d'ouverture** (ce que vos avatars rejouent tout seuls) : la caméra la voit travailler, je me retourne ensuite pour l'aider et discuter avec elle.
 - **Ce qu'elle joue** (2 à 4 actions simples) : Elle ne joue rien.
-- **Objet laissé dans le pré** (optionnel) : [ex : une tasse de café géante. Par défaut : la photo en polaroid sur un chevalet]
+- **Objet laissé dans le pré** (optionnel) : une calculatrice.
 - **Photo** : [nom du fichier, ou "aucune"]
 - **Texte affiché** : [le message pour elle]
 - **Réplique du MJ avant** : "Est ce que tu te souviens de notre première rencontre?"
@@ -44,7 +44,7 @@
   - Détail clé ou clin d'œil : 
 - **Cinématique d'ouverture** : On arrive en marchant avec des pizza dans les mains pour s'asseoir sur le banc.
 - **Ce qu'elle joue** : Elle doit marcher jusqu'au banc.
-- **Objet laissé dans le pré** :
+- **Objet laissé dans le pré** : une boite de pizza.
 - **Photo** :
 - **Texte affiché** :
 - **Réplique du MJ avant** :
@@ -52,7 +52,27 @@
 
 ---
 
-## Souvenir 3 : [Titre]
+## Souvenir 3 : "Sexe entre amis"
+
+- **Date** : Ete 2023
+- **Lieu** : Chez Olivier
+- **Ce qui s'est passé** : On était encore amis à ce moment là. Elle était chez moi ce soir là. On était dans une chambre allongé sur le lit et on a regardé un film et on cherchait quel film regardé.
+- **Scène 3D à recréer** :
+  - Décor : Chambre Bleu, sur un lit avec des draps bleus nuits. En face du lit, une commode en bois avec un écran plat dessus. Netflix ouvert sur la télé.
+  - Moment de la journée et météo : nuit
+  - Pose des avatars : allongé cote à cote sur le lit
+  - Détail clé ou clin d'œil :
+- **Cinématique d'ouverture** : Olivier marche jusqu'au lit et s'allonge dessus. 
+- **Ce qu'elle joue** : Elle doit marcher jusqu'au lit pour s'allonger. Elle doit ensuite swiper les films sur netflix jusqu'à tomber sur le film "sexe entre amis".
+- **Objet laissé dans le pré** : Un dvd.
+- **Photo** :
+- **Texte affiché** :
+- **Réplique du MJ avant** : Aller, maintenant, viens regarder un film à la maison !
+- **Réplique du MJ après** : J'étais loin d'imaginer que ce ne serait pas seulement le nom d'un film.
+
+---
+
+## Souvenir 4 : [Titre]
 
 - **Date** :
 - **Lieu** :
@@ -69,13 +89,51 @@
 - **Texte affiché** :
 - **Réplique du MJ avant** :
 - **Réplique du MJ après** :
-
----
-
 (Dupliquer la fiche pour les souvenirs suivants.)
 
 ---
 
+## Souvenir 5 : [Titre]
+
+- **Date** :
+- **Lieu** :
+- **Ce qui s'est passé** :
+- **Scène 3D à recréer** :
+  - Décor :
+  - Moment de la journée et météo :
+  - Pose des avatars :
+  - Détail clé ou clin d'œil :
+- **Cinématique d'ouverture** :
+- **Ce qu'elle joue** :
+- **Objet laissé dans le pré** :
+- **Photo** :
+- **Texte affiché** :
+- **Réplique du MJ avant** :
+- **Réplique du MJ après** :
+(Dupliquer la fiche pour les souvenirs suivants.)
+
+---
+
+## Souvenir 6 : [Titre]
+
+- **Date** :
+- **Lieu** :
+- **Ce qui s'est passé** :
+- **Scène 3D à recréer** :
+  - Décor :
+  - Moment de la journée et météo :
+  - Pose des avatars :
+  - Détail clé ou clin d'œil :
+- **Cinématique d'ouverture** :
+- **Ce qu'elle joue** :
+- **Objet laissé dans le pré** :
+- **Photo** :
+- **Texte affiché** :
+- **Réplique du MJ avant** :
+- **Réplique du MJ après** :
+(Dupliquer la fiche pour les souvenirs suivants.)
+
+---
 ## Introduction du MJ
 
 Ce que ton avatar dit au tout début du jeu (accueil, explication du principe) :
