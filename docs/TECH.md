@@ -29,6 +29,7 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     │   ├── World.ts     # chargement du monde et des zones
     │   ├── Avatar.ts    # ce que savent faire les deux avatars (marcher, s'asseoir, saluer, tenir)
     │   ├── Modele.ts    # avatar de secours construit dans le code, et ses animations
+    │   ├── avatars/Maelle.ts # avatar de Maëlle (modèle à part, d'après son image de référence)
     │   ├── ModeleImporte.ts # vrai modèle .glb (Meshy) et ses animations
     │   ├── Player.ts    # avatar de la joueuse, déplacements, animations
     │   ├── GameMaster.ts# avatar du MJ (PNJ scripté) : déplacements automatiques, dialogues
@@ -114,6 +115,7 @@ La progression (intro vue, nombre de souvenirs débloqués) est gardée dans le 
 Première version (octobre 2026), gardée comme avatar de secours : les avatars sont **construits directement dans le code** (`src/game/Modele.ts`) à partir de formes simples, dans un style low poly « figurine », d'après les photos fournies par Olivier. Pas besoin d'outil d'IA, de Mixamo ni de Blender, et rien à télécharger : c'est léger, fiable et modifiable à tout moment.
 
 - **Style** : `"style": "mii"` donne le style « figurine en pâte à modeler » des images de référence d'Olivier (octobre 2026) : grosse tête ronde, gros nez rond, grands yeux dessinés (iris coloré, gros reflet, cils pour elle), sourcils épais, sourire (fermé ou bouche ouverte), barbe pleine et moustache peintes, avec une version yeux fermés pour cligner. Cheveux en grosses mèches lisses : gouttes rondes qui retombent sur le front pour lui, longues mèches ondulées qui s'évasent avec une raie au milieu pour elle. Bras dodus et mains rondes en moufle. Sans ce champ, on retrouve l'ancien style détaillé
+- **Maëlle** a son propre modèle (`src/game/avatars/Maelle.ts`, `"style": "maelle"`), refait de zéro d'après son image Gemini (figurine pâte à modeler) : grosse tête, grands yeux bleus avec eye-liner, grand sourire, longs cheveux miel en gros boudins ondulés avec la raie au milieu, t-shirt beige, pantalon large blanc à fleurs vertes, ballerines. Ses couleurs se règlent dans `avatars.json` (`peau`, `joues`, `yeux`, `sourcils`, `cheveux`, `reflets`, `ombres`, `haut`, `pantalon.fond`, `pantalon.fleurs`, `chaussures`, `taille`)
 - **Apparence** dans `src/data/avatars.json` : taille, couleurs (peau, yeux, lèvres, cheveux et reflets, haut, pantalon, chaussures), coiffure (`longue-bouclee` ou `courte-ondulee`), barbe, cils, taches de rousseur, joues, `bouche` (`ouverte` ou `sourire`), manches (`longues` ou `courtes`), `motif` (couleur du logo trèfle et bol de nouilles sur la poitrine), `pantalonForme` (`large` ou `evase`), `pantalonMotif` (imprimé à fleurs : `{ "fond", "fleurs" }`), `chaussuresForme` (`ballerines` ou `baskets`), `bracelet` (couleur des perles au poignet droit). Changer une couleur ne demande pas de toucher au code
 - **Légèreté** : dans chaque articulation, les morceaux de même couleur sont fusionnés (environ 20 000 triangles pour lui, 30 000 pour elle à cause des cheveux)
 - **Squelette simple** : hanches, genoux, épaules, coudes et tête, animés par le code

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Modele, HANCHE, HAUTEUR_SIEGE, POSITION_MAINS, type Apparence } from './Modele';
 import { ModeleImporte, type DescriptionModele3d } from './ModeleImporte';
+import { ModeleMaelle, type ApparenceMaelle } from './avatars/Maelle';
 
 export const RAYON_AVATAR = 0.4;
 const VITESSE_MARCHE_SCRIPT = 3.2;
@@ -24,7 +25,7 @@ export class Personnage {
   readonly rayon = RAYON_AVATAR;
   /** Le corps visible ; contient aussi les objets tenus en main */
   protected corps: THREE.Group;
-  protected modele: Modele;
+  protected modele: Modele | ModeleMaelle;
   /** Le vrai modèle 3D, une fois chargé (sinon l'avatar construit dans le code sert de secours) */
   private importe: ModeleImporte | null = null;
   protected temps = 0;
@@ -39,9 +40,10 @@ export class Personnage {
   private finMarche: (() => void) | null = null;
   private salut = 0;
 
-  constructor(apparence: Apparence & { modele3d?: DescriptionModele3d | null }) {
+  constructor(apparence: (Apparence | ApparenceMaelle) & { modele3d?: DescriptionModele3d | null }) {
     this.corps = new THREE.Group();
-    this.modele = new Modele(apparence);
+    // Maëlle a son propre modèle (src/game/avatars/Maelle.ts)
+    this.modele = apparence.style === 'maelle' ? new ModeleMaelle(apparence as ApparenceMaelle) : new Modele(apparence as Apparence);
     this.corps.add(this.modele.racine);
     this.object.add(this.corps);
     if (apparence.modele3d?.fichier) this.chargerModele3d(apparence.modele3d);
