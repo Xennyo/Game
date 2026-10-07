@@ -12,7 +12,7 @@ export interface Apparence {
   yeux: string;
   cheveux: string;
   reflets: string;
-  /** 'longue-ondulee', 'courte-bouclee', ou 'simple' (figurants) */
+  /** 'longue-bouclee', 'courte-ondulee', ou 'simple' (figurants) */
   coiffure: string;
   barbe: string | null;
   haut: string;
@@ -229,8 +229,18 @@ function coque(r: number, garder: (n: THREE.Vector3) => boolean): THREE.BufferGe
  * Une zone de la tête aux bords bien nets : pour chaque direction autour de la tête
  * (phi = 0 devant), elle va de la hauteur haut(phi) jusqu'à bas (de -1 à 1).
  */
-function zoneLisse(r: number, phiMin: number, phiMax: number, haut: (phi: number) => number, bas: number, nPhi = 56, nH = 18) {
+function zoneLisse(
+  r: number,
+  phiMin: number,
+  phiMax: number,
+  haut: (phi: number) => number,
+  bas: number,
+  nPhi = 56,
+  nH = 18,
+  densite?: (phi: number, ny: number, j: number) => number,
+) {
   const pos: number[] = [];
+  const couleurs: number[] = [];
   const index: number[] = [];
   for (let i = 0; i <= nPhi; i++) {
     const phi = phiMin + ((phiMax - phiMin) * i) / nPhi;
@@ -243,6 +253,7 @@ function zoneLisse(r: number, phiMin: number, phiMax: number, haut: (phi: number
       let z = rr * Math.cos(phi) * r;
       z *= z > 0 ? (ny < 0 ? 1 - 0.04 * -ny : 1) : 0.94 * largeurMachoire(ny);
       pos.push(x * largeurMachoire(ny), y * ETIRE, z);
+      if (densite) couleurs.push(1, 1, 1, densite(phi, ny, j));
     }
   }
   for (let i = 0; i < nPhi; i++) {
@@ -254,6 +265,7 @@ function zoneLisse(r: number, phiMin: number, phiMax: number, haut: (phi: number
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  if (densite) g.setAttribute('color', new THREE.Float32BufferAttribute(couleurs, 4));
   g.setIndex(index);
   g.computeVertexNormals();
   return g;
@@ -449,8 +461,8 @@ export class Modele {
 
     if (!a.simple) this.construireVisage();
     if (a.barbe) this.construireBarbe(a.barbe);
-    if (a.coiffure === 'longue-ondulee') this.cheveuxLongs();
-    else if (a.coiffure === 'courte-bouclee') this.cheveuxBoucles();
+    if (a.coiffure.startsWith('longue')) this.cheveuxLongs();
+    else if (a.coiffure.startsWith('courte')) this.cheveuxCourts();
     else this.cheveuxSimples();
   }
 
@@ -527,19 +539,36 @@ export class Modele {
 
   private construireBarbe(couleur: string) {
     const t = this.tete;
-    // Barbe courte : mâchoire et menton, la bouche reste visible
-    const barbe = zoneLisse(R * 1.03, -1.8, 1.8, (phi) => -0.33 + 0.6 * Math.sin(phi) ** 2, -0.97);
-    const m = new THREE.Mesh(barbe, mat(couleur, { double: true }));
-    m.castShadow = true;
-    t.add(m);
-    // Moustache
-    const pts = [[-0.05, -0.074], [-0.02, -0.066], [0.02, -0.066], [0.05, -0.074]].map(
-      ([x, y]) => new THREE.Vector3(x, y, surface(x, y) + 0.006),
+    // Barbe courte et taillée : elle laisse voir un peu la peau, et ses bords sont fondus
+    const haut = (phi: number) => -0.27 + 0.33 * Math.sin(phi) ** 2;
+    const phiMax = 1.75;
+    const barbe = zoneLisse(R * 1.012, -phiMax, phiMax, haut, -0.96, 60, 20, (phi, ny, j) => {
+      const bordHaut = Math.min(1, j / 5);
+      const bordCote = Math.min(1, (phiMax - Math.abs(phi)) / 0.35);
+      // Plus fournie sur le menton que sur les joues
+      const menton = ny < -0.55 && Math.abs(phi) < 0.6 ? 1 : 0.82;
+      return 0.94 * bordHaut * bordCote * menton;
+    });
+    const m = new THREE.Mesh(
+      barbe,
+      new THREE.MeshStandardMaterial({
+        color: couleur,
+        vertexColors: true,
+        transparent: true,
+        depthWrite: false,
+        roughness: 1,
+        side: THREE.DoubleSide,
+      }),
     );
-    piece(t, tube(pts, 0.012, 0.009, 6, 10), couleur, [0, 0, 0]);
+    t.add(m);
+    // Moustache fine, qui rejoint la barbe aux coins de la bouche
+    const pts = [[-0.052, -0.086], [-0.035, -0.073], [-0.012, -0.068], [0.012, -0.068], [0.035, -0.073], [0.052, -0.086]].map(
+      ([x, y]) => new THREE.Vector3(x, y, surface(x, y) + 0.005),
+    );
+    piece(t, tube(pts, 0.008, 0.006, 5, 14), couleur, [0, 0, 0]);
   }
 
-  /** Longs cheveux ondulés avec une raie au milieu */
+  /** Longs cheveux bouclés avec une raie au milieu */
   private cheveuxLongs() {
     const a = this.a;
     const c = this.cheveux;
@@ -548,7 +577,7 @@ export class Modele {
     // Derrière et sur les côtés, jusqu'à la nuque
     c.add(new THREE.Mesh(coque(R * 1.04, (n) => n.z < 0.25 && n.y > -0.75), mat(a.cheveux, { double: true })));
     // Une nappe de cheveux dans le dos, sous les mèches, pour qu'on ne voie pas le manteau entre elles
-    const nappe = tour([[0.2, 0.02], [0.245, -0.15], [0.262, -0.38], [0.255, -0.6]], 0.85, Math.PI / 2 + 0.25, Math.PI - 0.5, 14);
+    const nappe = tour([[0.2, 0.02], [0.26, -0.15], [0.3, -0.38], [0.31, -0.6]], 0.85, Math.PI / 2 + 0.25, Math.PI - 0.5, 14);
     const mn = new THREE.Mesh(nappe, mat(fonce(a.cheveux, 0.85), { double: true }));
     mn.castShadow = true;
     c.add(mn);
@@ -556,7 +585,7 @@ export class Modele {
     const fonces: THREE.BufferGeometry[] = [];
     const clairs: THREE.BufferGeometry[] = [];
     const h = hasard(5);
-    const N = 50;
+    const N = 46;
     for (let i = 0; i < N; i++) {
       let phi = 1.1 + ((Math.PI * 2 - 2.2) * (i + 0.5)) / N + (h() - 0.5) * 0.05;
       if (phi > Math.PI) phi -= Math.PI * 2;
@@ -575,65 +604,86 @@ export class Modele {
           ),
         );
       }
-      // Puis la chute, en ondulant
+      // Puis la chute, en boucles serrées (des anglaises) qui s'élargissent vers le bas
       const y0 = pts[pts.length - 1].y;
-      const longueur = 0.58 + (devant < 0 ? -devant * 0.12 : 0) + h() * 0.08;
+      const longueur = 0.55 + (devant < 0 ? -devant * 0.12 : 0) + h() * 0.1;
       const graine = h() * Math.PI * 2;
-      const etapes = 8;
+      const tours = 4.5 + h() * 1.5;
+      const etapes = 30;
       for (let k = 1; k <= etapes; k++) {
         const s = k / etapes;
         const y = y0 - longueur * s;
-        const onde = Math.sin(s * Math.PI * 3.6 + graine);
-        const rayon = rh * Math.sin(1.25) + 0.025 + 0.06 * s + onde * 0.022;
-        let x = rayon * sx + Math.cos(phi) * onde * 0.015;
-        let z = rayon * devant - Math.sin(phi) * onde * 0.015;
+        // Les cheveux bouclés prennent du volume en descendant
+        const rayon = rh * Math.sin(1.25) + 0.035 + 0.11 * Math.sqrt(s);
+        const angle = s * tours * Math.PI * 2 + graine;
+        const boucle = (0.012 + 0.024 * Math.min(1, s * 3)) * (1 - 0.2 * s);
+        let x = rayon * sx + (Math.cos(phi) * Math.cos(angle) + sx * Math.sin(angle)) * boucle;
+        let z = rayon * devant + (-Math.sin(phi) * Math.cos(angle) + devant * Math.sin(angle)) * boucle;
         // Les mèches de devant passent par-dessus les épaules et tombent sur la poitrine
         if (devant > 0.15 && y < -0.25) z += 0.07 * devant * Math.min(1, (-0.25 - y) / 0.15);
         if (devant > -0.3 && y < -0.3) x += cote * 0.02;
         pts.push(new THREE.Vector3(x, y, z));
       }
-      (i % 3 === 0 ? clairs : fonces).push(tube(pts, 0.04 + h() * 0.008, 0.022, 5, 15));
+      (i % 3 === 0 ? clairs : fonces).push(tube(pts, 0.032 + h() * 0.006, 0.02, 5, 56));
     }
     fusion(c, fonces, a.cheveux);
     fusion(c, clairs, a.reflets);
   }
 
-  /** Cheveux courts et bouclés, quelques boucles sur le front */
-  private cheveuxBoucles() {
+  /** Cheveux courts et ondulés : du volume sur le dessus, des mèches qui retombent sur le front */
+  private cheveuxCourts() {
     const a = this.a;
     const c = this.cheveux;
     const zone = (n: THREE.Vector3) => n.y > -0.05 + Math.max(0, n.z) * 0.5 || (n.z < -0.2 && n.y > -0.5);
     c.add(new THREE.Mesh(coque(R * 1.04, zone), mat(a.cheveux, { double: true })));
+    // Volume sur le dessus de la tête
+    c.add(calotte(R * 1.13, 1.05, -0.3, a.cheveux));
 
     const fonces: THREE.BufferGeometry[] = [];
     const clairs: THREE.BufferGeometry[] = [];
     const h = hasard(11);
     const n = new THREE.Vector3();
-    const semer = (nb: number, creer: () => THREE.BufferGeometry, rayon: number, gonfle: number, basMin: number) => {
-      let places = 0;
-      for (let essai = 0; places < nb && essai < nb * 20; essai++) {
-        n.set(h() * 2 - 1, h() * 2 - 1, h() * 2 - 1);
-        if (n.lengthSq() > 1 || n.lengthSq() < 0.01) continue;
-        n.normalize();
-        if (!(n.y > 0.08 + Math.max(0, n.z) * 0.42 || (n.z < -0.2 && n.y > basMin))) continue;
-        const r = R * rayon + gonfle * Math.max(0, n.y);
-        const g = creer();
-        g.rotateX(h() * Math.PI * 2);
-        g.rotateY(h() * Math.PI * 2);
-        g.translate(n.x * r * largeurMachoire(n.y), n.y * r * ETIRE, n.z * r);
-        (places % 3 ? fonces : clairs).push(g);
-        places++;
-      }
-    };
-    // Du volume, puis des boucles par-dessus
-    semer(70, () => new THREE.IcosahedronGeometry(0.056 + h() * 0.02, 1), 1.12, 0.05, -0.4);
-    semer(65, () => new THREE.TorusGeometry(0.02 + h() * 0.006, 0.013, 5, 8), 1.2, 0.04, 0.05);
-    // Boucles qui retombent sur le front
-    for (const [x, y] of [[-0.085, 0.13], [-0.03, 0.145], [0.035, 0.14], [0.09, 0.125]]) {
-      const g = new THREE.TorusGeometry(0.02, 0.013, 6, 9);
-      g.rotateY(0.3 + h());
-      g.translate(x, y, surface(x, y) + 0.03);
-      fonces.push(g);
+    const f = new THREE.Vector3();
+    const b = new THREE.Vector3();
+    const avant = new THREE.Vector3(0, -0.55, 1);
+    const arriere = new THREE.Vector3(0, -1, -0.2);
+    let places = 0;
+    for (let essai = 0; places < 130 && essai < 4000; essai++) {
+      n.set(h() * 2 - 1, h() * 2 - 1, h() * 2 - 1);
+      if (n.lengthSq() > 1 || n.lengthSq() < 0.01) continue;
+      n.normalize();
+      if (!(n.y > 0.12 + Math.max(0, n.z) * 0.38 || (n.z < -0.2 && n.y > -0.35))) continue;
+      // Les mèches partent vers l'avant et vers le bas, en suivant la tête
+      const sens = n.z > -0.15 ? avant : arriere;
+      f.copy(sens).addScaledVector(n, -sens.dot(n));
+      f.x += (h() - 0.5) * 0.6;
+      f.addScaledVector(n, -f.dot(n)).normalize();
+      b.crossVectors(n, f);
+      const r = R * (1.13 + Math.max(0, n.y) * 0.04);
+      const depart = new THREE.Vector3(n.x * r * largeurMachoire(n.y), n.y * r * ETIRE, n.z * r);
+      const longueur = 0.09 + h() * 0.05;
+      const onde = (h() - 0.5) * 0.03;
+      const pts = [0, 0.33, 0.66, 1].map((u) =>
+        depart
+          .clone()
+          .addScaledVector(f, longueur * u)
+          .addScaledVector(n, 0.012 * Math.sin(u * Math.PI) - 0.022 * u)
+          .addScaledVector(b, onde * Math.sin(u * Math.PI * 1.5)),
+      );
+      (places % 3 ? fonces : clairs).push(tube(pts, 0.03, 0.012, 5, 8));
+      places++;
+    }
+    // Mèches qui retombent sur le front
+    for (const [x, inclinaison] of [[-0.09, 0.5], [-0.045, 0.25], [0.0, -0.05], [0.05, -0.3], [0.095, -0.5]]) {
+      const y = 0.15;
+      const z = surface(x, y) + 0.03;
+      const pts = [
+        new THREE.Vector3(x, y + 0.03, z - 0.01),
+        new THREE.Vector3(x + inclinaison * 0.02, y, z + 0.012),
+        new THREE.Vector3(x + inclinaison * 0.045, y - 0.04, z + 0.004),
+        new THREE.Vector3(x + inclinaison * 0.05, y - 0.065, z - 0.008),
+      ];
+      fonces.push(tube(pts, 0.024, 0.008, 5, 8));
     }
     fusion(c, fonces, a.cheveux);
     fusion(c, clairs, a.reflets);
