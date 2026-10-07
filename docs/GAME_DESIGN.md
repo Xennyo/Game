@@ -15,7 +15,7 @@
 
 Elle incarne son propre avatar 3D low poly dans un petit monde coloré et chaleureux. Le monde est une carte des souvenirs du couple : chaque zone correspond à un moment vécu ensemble. En s'approchant d'une zone, elle débloque le souvenir : la scène est recréée en 3D, avec une photo d'époque et un texte d'Olivier.
 
-L'avatar d'Olivier est le maître du jeu. Il l'accueille, lui explique quoi faire, l'oriente vers le souvenir suivant et commente chaque moment. Le parcours se termine par une surprise finale.
+L'avatar d'Olivier est le maître du jeu, sous forme de **PNJ** (personnage non jouable) : Olivier ne joue pas pendant la partie, son avatar suit un script écrit à l'avance. Il l'accueille, lui explique quoi faire, l'oriente vers le souvenir suivant et commente chaque moment. Le parcours se termine par une surprise finale.
 
 ## Personnages
 
@@ -25,7 +25,8 @@ L'avatar d'Olivier est le maître du jeu. Il l'accueille, lui explique quoi fair
 
 ### Le maître du jeu (avatar d'Olivier)
 - Modèle 3D low poly à son image, mêmes animations de base, plus un geste (salut ou signe de la main)
-- Personnage non jouable qui :
+- **Personnage non jouable (PNJ), entièrement automatique** : personne ne le contrôle pendant la partie. Ses déplacements, ses gestes et ses répliques sont écrits à l'avance dans les données du jeu. Maëlle joue seule
+- Il :
   - l'accueille au début et explique les contrôles
   - indique où aller ensuite (il peut se téléporter près du prochain souvenir et l'attendre)
   - introduit chaque souvenir par une réplique, puis le commente après
@@ -53,7 +54,7 @@ L'avatar d'Olivier est le maître du jeu. Il l'accueille, lui explique quoi fair
 
 Chaque souvenir se **rejoue en direct**, ce n'est pas une image figée d'un lieu. C'est un mini-décor 3D qui évoque le moment, sans chercher le réalisme :
 - quelques éléments clés suffisent (un banc et un lampadaire, une table de restaurant, une plage avec un parasol)
-- le souvenir est une suite de petites étapes décrites dans les données : cinématique (les avatars bougent et parlent tout seuls), puis actions jouées par elle (aller à un point, interagir avec un objet ou avec le MJ)
+- le souvenir est une suite de petites étapes décrites dans les données : cinématique (les avatars bougent et parlent tout seuls), puis actions jouées par elle (aller à un point, interagir avec un objet ou avec l'avatar d'Olivier, qui réagit selon le script)
 - les actions restent très simples : pas d'échec possible, pas de timing, pas de mini-jeu
 - une ambiance propre au souvenir : couleur du ciel, heure du jour, météo
 - la photo réelle est montrée à côté, comme un cadre ou une polaroid
@@ -81,7 +82,7 @@ Les éléments de décor viennent de packs d'assets low poly gratuits (voir `TEC
 ## Hors périmètre
 
 Pour garder le projet réaliste, on ne fait pas :
-- de multijoueur
+- de multijoueur : Olivier ne joue pas en même temps qu'elle, son avatar est un PNJ
 - de physique complexe ou de saut
 - de compte, de serveur ou de base de données
 - de mini-jeux (sauf s'il reste du temps à la fin)

@@ -6,7 +6,7 @@ Instructions permanentes pour Claude Code dans ce projet.
 
 ## Le projet
 
-Un jeu 3D dans le navigateur, offert par Olivier à sa copine pour son anniversaire. Elle incarne son avatar 3D low poly et explore un petit monde pour débloquer leurs souvenirs communs, chacun recréé sous forme de scène 3D. L'avatar d'Olivier joue le maître du jeu (MJ) : il la guide et l'accompagne jusqu'à une surprise finale.
+Un jeu 3D dans le navigateur, offert par Olivier à sa copine pour son anniversaire. Elle incarne son avatar 3D low poly et explore un petit monde pour débloquer leurs souvenirs communs, chacun recréé sous forme de scène 3D. L'avatar d'Olivier est un **personnage non jouable (PNJ)** qui tient le rôle de maître du jeu (MJ) : entièrement scripté, il lui explique le jeu, la guide et l'accompagne jusqu'à une surprise finale. Olivier ne joue pas pendant la partie : tout ce que fait et dit son avatar est écrit à l'avance.
 
 C'est un cadeau personnel, joué une fois, par une seule personne. Ce qui compte :
 1. **L'émotion** : les souvenirs doivent être reconnaissables et touchants

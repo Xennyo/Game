@@ -28,7 +28,7 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     │   ├── Game.ts      # boucle principale, gestion des états (titre, exploration, souvenir, fin)
     │   ├── World.ts     # chargement du monde et des zones
     │   ├── Player.ts    # avatar de la joueuse, déplacements, animations
-    │   ├── GameMaster.ts# avatar du MJ, déplacements, dialogues
+    │   ├── GameMaster.ts# avatar du MJ (PNJ scripté) : déplacements automatiques, dialogues
     │   ├── Camera.ts    # caméra à la troisième personne
     │   ├── Input.ts     # clavier et joystick tactile
     │   └── Memory.ts    # zone de souvenir : déclenchement, scène, séquence (cinématique puis actions jouées), déblocage
