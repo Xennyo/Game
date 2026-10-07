@@ -1,31 +1,31 @@
 import type { MoveInput } from './Input';
 import { Personnage, tournerVers } from './Avatar';
+import avatars from '../data/avatars.json';
 
 const VITESSE_MAX = 7; // mètres par seconde, en course
 const VITESSE_ROTATION = 10;
 
 /**
- * Avatar de la joueuse. Pour l'instant une capsule rose (placeholder) :
- * le vrai modèle .glb remplacera le corps à l'étape 5.
+ * Avatar de la joueuse (apparence dans src/data/avatars.json).
  * Elle est contrôlée par le clavier ou le joystick, sauf quand un script la fait marcher.
  */
 export class Player extends Personnage {
   constructor() {
-    super('#f28fb0');
+    super(avatars.joueuse);
   }
 
   /**
    * Déplace l'avatar selon l'entrée, orientée par l'angle de la caméra.
-   * Retourne la vitesse actuelle (utile plus tard pour les animations).
+   * Retourne la vitesse actuelle.
    */
   update(dt: number, move: MoveInput, cameraYaw: number): number {
     if (this.updateMarche(dt)) {
-      this.updateCorps(dt, true);
-      return 3;
+      this.updateCorps(dt, 3.2);
+      return 3.2;
     }
     if (move.force === 0) {
       this.updateRegard(dt);
-      this.updateCorps(dt, false);
+      this.updateCorps(dt, 0);
       return 0;
     }
 
@@ -46,8 +46,7 @@ export class Player extends Personnage {
     // Tourne en douceur vers la direction de marche
     tournerVers(this.object, Math.atan2(dirX, dirZ), VITESSE_ROTATION, dt);
 
-    // Petit rebond de marche, en attendant les vraies animations
-    this.updateCorps(dt, true, 6 + vitesse);
+    this.updateCorps(dt, vitesse);
     return vitesse;
   }
 }

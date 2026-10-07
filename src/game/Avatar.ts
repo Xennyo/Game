@@ -1,35 +1,13 @@
 import * as THREE from 'three';
+import { Modele, HANCHE, POSITION_MAINS, type Apparence } from './Modele';
 
 export const RAYON_AVATAR = 0.4;
 const VITESSE_MARCHE_SCRIPT = 3.2;
-const DESCENTE_ASSIS = 0.45;
+/** Hauteur du dessus d'un siège (bancs, gradins) */
+const HAUTEUR_SIEGE = 0.47;
+const DUREE_SALUT = 1.4;
 
 export type Pose = 'debout' | 'assis';
-
-/**
- * Corps placeholder d'un avatar : une capsule colorée avec un petit "nez"
- * pour voir où il regarde. Les vrais modèles .glb le remplaceront à l'étape 5.
- */
-export function creerCorpsPlaceholder(couleur: string): THREE.Group {
-  const corps = new THREE.Group();
-
-  const capsule = new THREE.Mesh(
-    new THREE.CapsuleGeometry(RAYON_AVATAR, 0.9, 4, 12),
-    new THREE.MeshStandardMaterial({ color: couleur, flatShading: true }),
-  );
-  capsule.position.y = 0.85;
-  capsule.castShadow = true;
-  corps.add(capsule);
-
-  const nez = new THREE.Mesh(
-    new THREE.SphereGeometry(0.12, 8, 6),
-    new THREE.MeshStandardMaterial({ color: '#ffffff' }),
-  );
-  nez.position.set(0, 1.3, RAYON_AVATAR);
-  corps.add(nez);
-
-  return corps;
-}
 
 /** Tourne un objet en douceur vers une direction (angle autour de l'axe vertical) */
 export function tournerVers(objet: THREE.Object3D, cible: number, vitesse: number, dt: number) {
@@ -47,7 +25,11 @@ export class Personnage {
   readonly rayon = RAYON_AVATAR;
   /** Le corps visible ; contient aussi les objets tenus en main */
   protected corps: THREE.Group;
+  protected modele: Modele;
   protected temps = 0;
+  private phase = 0;
+  private amplitude = 0;
+  private assis = 0;
   protected pose: Pose = 'debout';
   /** Point que le personnage fixe du regard (sinon : comportement par défaut) */
   protected regard: THREE.Vector3 | (() => THREE.Vector3) | null = null;
@@ -56,8 +38,10 @@ export class Personnage {
   private finMarche: (() => void) | null = null;
   private salut = 0;
 
-  constructor(couleur: string) {
-    this.corps = creerCorpsPlaceholder(couleur);
+  constructor(apparence: Apparence) {
+    this.corps = new THREE.Group();
+    this.modele = new Modele(apparence);
+    this.corps.add(this.modele.racine);
     this.object.add(this.corps);
   }
 
@@ -87,10 +71,10 @@ export class Personnage {
     this.regard = cible;
   }
 
-  /** Petit saut de joie / signe de la main (placeholder du vrai geste) */
+  /** Signe de la main */
   saluer(): Promise<void> {
-    this.salut = 0.8;
-    return new Promise((resolve) => setTimeout(resolve, 800));
+    this.salut = DUREE_SALUT;
+    return new Promise((resolve) => setTimeout(resolve, DUREE_SALUT * 1000));
   }
 
   /** Remet le personnage dans son état normal (après une scène de souvenir) */
@@ -106,7 +90,7 @@ export class Personnage {
   /** Accroche un objet dans les mains du personnage */
   tenir(objet: THREE.Object3D) {
     objet.userData.tenu = true;
-    objet.position.set(0, 1.05, RAYON_AVATAR + 0.2);
+    objet.position.copy(POSITION_MAINS).multiplyScalar(this.modele.a.taille);
     this.corps.add(objet);
   }
 
@@ -142,17 +126,30 @@ export class Personnage {
     return true;
   }
 
-  /** Hauteur du corps : rebond de marche, salut, ou position assise */
-  protected updateCorps(dt: number, enMouvement: boolean, vitesseRebond = 9) {
+  /** Anime le corps : marche ou course selon la vitesse (m/s), salut, position assise */
+  protected updateCorps(dt: number, vitesse: number) {
     this.temps += dt;
-    if (enMouvement) {
-      this.corps.position.y = Math.abs(Math.sin(this.temps * vitesseRebond)) * 0.08;
-    } else if (this.salut > 0) {
-      this.salut -= dt;
-      this.corps.position.y = Math.abs(Math.sin(this.salut * Math.PI * 2.5)) * 0.35;
-    } else {
-      const cible = this.pose === 'assis' ? -DESCENTE_ASSIS : 0;
-      this.corps.position.y = THREE.MathUtils.damp(this.corps.position.y, cible, 10, dt);
-    }
+    const bouge = vitesse > 0.05;
+    if (bouge) this.phase += dt * (4.5 + vitesse * 1.3);
+    const cible = bouge ? Math.min(1, 0.45 + (vitesse / 7) * 0.55) : 0;
+    this.amplitude = THREE.MathUtils.damp(this.amplitude, cible, 10, dt);
+    this.assis = THREE.MathUtils.damp(this.assis, this.pose === 'assis' && !bouge ? 1 : 0, 9, dt);
+    if (this.salut > 0) this.salut = Math.max(0, this.salut - dt);
+
+    // En position assise, le bassin descend jusqu'à la hauteur du siège
+    const descente = HANCHE * this.modele.a.taille - HAUTEUR_SIEGE;
+    this.corps.position.y = -descente * this.assis + Math.abs(Math.sin(this.phase)) * 0.05 * this.amplitude;
+
+    // Le bras se lève et se rabaisse en douceur au début et à la fin du salut
+    const salut = Math.min(1, this.salut / 0.25, (DUREE_SALUT - this.salut) / 0.25);
+    const tient = this.corps.children.some((o) => o.userData.tenu);
+    this.modele.animer({
+      temps: this.temps,
+      phase: this.phase,
+      amplitude: this.amplitude,
+      assis: this.assis,
+      salut: Math.max(0, salut),
+      tient,
+    });
   }
 }

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Personnage, tournerVers } from './Avatar';
+import avatars from '../data/avatars.json';
 
 /**
  * Avatar d'Olivier, le maître du jeu. C'est un PNJ : personne ne le contrôle,
@@ -11,7 +12,7 @@ export class GameMaster extends Personnage {
   regardAuto = true;
 
   constructor() {
-    super('#6fa8dc');
+    super(avatars.mj);
   }
 
   /** Disparaît et réapparaît ailleurs, avec un petit effet de rétrécissement */
@@ -23,7 +24,7 @@ export class GameMaster extends Personnage {
 
   update(dt: number, joueuse: THREE.Vector3) {
     if (this.updateMarche(dt)) {
-      this.updateCorps(dt, true);
+      this.updateCorps(dt, 3.2);
       return;
     }
     if (!this.updateRegard(dt) && this.regardAuto) {
@@ -31,7 +32,7 @@ export class GameMaster extends Personnage {
       const pos = this.object.position;
       tournerVers(this.object, Math.atan2(joueuse.x - pos.x, joueuse.z - pos.z), 5, dt);
     }
-    this.updateCorps(dt, false);
+    this.updateCorps(dt, 0);
   }
 
   private animerEchelle(de: number, a: number, duree: number): Promise<void> {

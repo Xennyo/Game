@@ -27,7 +27,8 @@ Pas de moteur physique au départ : un sol plat (ou un terrain simple) et des co
     ├── game/
     │   ├── Game.ts      # boucle principale, gestion des états (titre, exploration, souvenir, fin)
     │   ├── World.ts     # chargement du monde et des zones
-    │   ├── Avatar.ts    # corps placeholder commun aux deux avatars
+    │   ├── Avatar.ts    # ce que savent faire les deux avatars (marcher, s'asseoir, saluer, tenir)
+    │   ├── Modele.ts    # corps low poly des avatars et leurs animations
     │   ├── Player.ts    # avatar de la joueuse, déplacements, animations
     │   ├── GameMaster.ts# avatar du MJ (PNJ scripté) : déplacements automatiques, dialogues
     │   ├── Camera.ts    # caméra à la troisième personne
@@ -109,15 +110,13 @@ La progression (intro vue, nombre de souvenirs débloqués) est gardée dans le 
 
 ### Les deux avatars
 
-Objectif : un fichier `.glb` par avatar, low poly, rigué (avec un squelette) et avec au minimum les animations immobile, marche et course.
+Décision d'octobre 2026 : les avatars sont **construits directement dans le code** (`src/game/Modele.ts`) à partir de formes simples, dans un style low poly « figurine », d'après les photos fournies par Olivier. Pas besoin d'outil d'IA, de Mixamo ni de Blender, et rien à télécharger : c'est léger, fiable et modifiable à tout moment.
 
-Étapes conseillées :
-1. **Créer le modèle** à partir d'une photo, avec un outil d'IA image vers 3D (par exemple Meshy ou Tripo, en demandant un style low poly), ou avec un créateur de personnage stylisé. Alternative : partir d'un personnage low poly gratuit et l'adapter (coiffure, couleurs de vêtements)
-2. **Riguer et animer** avec Mixamo (gratuit, Adobe) : importer le modèle, placer les repères, puis télécharger les animations Idle, Walking, Running et une animation de salut pour le MJ
-3. **Assembler et exporter en `.glb`** avec Blender si besoin (Claude peut guider pas à pas)
-4. **Compresser** avec `gltf-transform` (Claude fournira la commande)
+- **Apparence** dans `src/data/avatars.json` : taille, couleurs (peau, yeux, cheveux et reflets, haut, pull intérieur, pantalon, chaussures), coiffure (`longue-ondulee` ou `courte-bouclee`), barbe, taches de rousseur, joues, manches (`longues` ou `courtes`), motif sur le t-shirt. Changer une couleur ne demande pas de toucher au code
+- **Squelette simple** : hanches, genoux, épaules, coudes et tête, animés par le code
+- **Animations** : immobile (respiration), marche et course (selon la vitesse), position assise (le bassin descend à 0,47 m, hauteur des bancs et des gradins), salut de la main (1,4 s), objet tenu à deux mains
 
-Tant que les avatars ne sont pas prêts, le jeu utilise des capsules colorées. Le code doit permettre de remplacer un placeholder par le vrai modèle en changeant seulement le chemin du fichier.
+Option pour plus tard : si un vrai modèle `.glb` est fait un jour (Meshy ou Tripo pour le modèle, Mixamo pour les animations, puis compression avec `gltf-transform`), il pourra remplacer le corps dans `Personnage` sans changer les scripts.
 
 Les outils et leurs conditions (gratuité, limites, licences) évoluent : vérifier au moment de s'en servir.
 

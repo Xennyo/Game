@@ -54,9 +54,9 @@ Cocher les cases au fur et à mesure.
 
 ## Étape 5 : Les vrais avatars
 
-- [ ] Intégration du modèle de la joueuse avec ses animations (immobile, marche, course)
-- [ ] Intégration du modèle du MJ avec ses animations et son geste de salut
-- [ ] Poses des avatars dans les scènes de souvenirs
+- [x] Avatar de la joueuse d'après sa photo, construit dans le code, avec ses animations (immobile, marche, course)
+- [x] Avatar du MJ d'après sa photo, mêmes animations plus le salut de la main
+- [x] Poses des avatars dans les scènes de souvenirs (assis, objet tenu à deux mains)
 
 **Validation** : les avatars sont reconnaissables et bien animés.
 

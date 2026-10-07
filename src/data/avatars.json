@@ -1,0 +1,36 @@
+{
+  "joueuse": {
+    "taille": 1,
+    "peau": "#f4d3c2",
+    "joues": "#eaa092",
+    "taches": "#c98b6a",
+    "yeux": "#7f97a6",
+    "cheveux": "#8a5a32",
+    "reflets": "#a9733f",
+    "coiffure": "longue-ondulee",
+    "barbe": null,
+    "haut": "#ece4d6",
+    "interieur": "#1c2340",
+    "manches": "longues",
+    "motif": null,
+    "pantalon": "#38466a",
+    "chaussures": "#f1f1f1"
+  },
+  "mj": {
+    "taille": 1.05,
+    "peau": "#e9b998",
+    "joues": null,
+    "taches": null,
+    "yeux": "#5b3b24",
+    "cheveux": "#221914",
+    "reflets": "#33261d",
+    "coiffure": "courte-bouclee",
+    "barbe": "#2b1f18",
+    "haut": "#1f1f23",
+    "interieur": null,
+    "manches": "courtes",
+    "motif": "#e7a9c9",
+    "pantalon": "#3c4e6e",
+    "chaussures": "#ececec"
+  }
+}
