@@ -12,11 +12,11 @@
 
 ---
 
-## Souvenir 1 : [Titre court, ex : "Notre premier rendez-vous"]
+## Souvenir 1 : Notre rencontre
 
-- **Date** : [mois et année]
-- **Lieu** : [ville, endroit précis]
-- **Ce qui s'est passé** : [2 ou 3 phrases pour que Claude comprenne le moment]
+- **Date** : Septembre 2022
+- **Lieu** : Fac, Lyon
+- **Ce qui s'est passé** : c'est le jour de notre rencontre, on était en CM de maths en amphithéatre, je me suis retourné pour l'aider sur un exercice et apprendre qu'on était ensemble en TD.
 - **Scène 3D à recréer** :
   - Décor : [ex : terrasse de café, deux chaises, une table, des guirlandes lumineuses]
   - Moment de la journée et météo : [ex : soir d'été, ciel orangé]
@@ -26,8 +26,8 @@
 - **Ce qu'elle joue** (2 à 4 actions simples) : [ex : 1. me rejoindre à la table, 2. s'asseoir, 3. toucher la tasse de café qui se renverse]
 - **Photo** : [nom du fichier, ou "aucune"]
 - **Texte affiché** : [le message pour elle]
-- **Réplique du MJ avant** : [ex : "Tu te souviens de cet endroit ?"]
-- **Réplique du MJ après** : [ex : "J'étais tellement stressé ce jour-là..."]
+- **Réplique du MJ avant** : "Est ce que tu te souviens de notre première rencontre?"
+- **Réplique du MJ après** : "Si j'avais su où ça nous mènerait"
 
 ---
 
