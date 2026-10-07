@@ -77,9 +77,9 @@
 
 Ce que ton avatar dit au tout début du jeu (accueil, explication du principe) :
 
-- [Réplique 1, ex : "Joyeux anniversaire ! Bienvenue dans un monde un peu spécial..."]
-- [Réplique 2]
-- [Réplique 3]
+- Coucou Chouchou Beignet, bienvenue ! 
+- On va faire un petit jeu ensemble, mais avant, je vais t'expliquer comment te déplacer dans ce monde ! 
+- (Expliquer le déplacement et les règles du jeu, la faire tester les déplacements avant d'amener le dialogue suivant.
 
 ## Surprise finale
 
